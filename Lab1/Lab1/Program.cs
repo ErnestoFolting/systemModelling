@@ -8,7 +8,8 @@ namespace Lab1
         {
             IGenerator generator = new Generator1();
             IGenerator generator2 = new Generator2();
-            Console.WriteLine(generator2.functionValue(0)); 
+            IGenerator generator3 = new Generator3();
+            generator3.Generate(100);
         }
     }
 }
