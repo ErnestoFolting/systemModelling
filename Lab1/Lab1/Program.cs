@@ -7,8 +7,8 @@ namespace Lab1
         static void Main(string[] args)
         {
             IGenerator generator = new Generator1();
-            generator.Generate(10);
-            //Console.WriteLine(generator.functionValue(5)); 
+            IGenerator generator2 = new Generator2();
+            Console.WriteLine(generator2.functionValue(0)); 
         }
     }
 }
