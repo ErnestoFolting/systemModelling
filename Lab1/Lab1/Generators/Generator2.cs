@@ -1,27 +1,30 @@
-﻿namespace Lab1.Generators
+﻿using Lab1.Helpers;
+
+namespace Lab1.Generators
 {
-    public class Generator2 : IGenerator
+    public class Generator2 : IGenerator //Normal
     {
-        private double _a = 0;
-        private double _sigma = 1;
+        private double _a = 2; //math expectation
+        private double _sigma = 0.5; //стандартне відхилення
 
         public List<double> Generate(int numbersToGenerate)
         {
-            List<double> generatedNumbers = new List<double>();
+            List<double> generatedNumbers = new();
 
             Random random = new Random();
+
             double x = 0;
 
             for (int i = 0; i < numbersToGenerate; i++)
             {
-
                 double sum = 0;
-                for (int j = 0; j < 12; j++)
+                for (int j = 1; j <= 12; j++)
                 {
                     sum += random.NextDouble();
                 }
                 double u = sum - 6;
                 x = _sigma * u + _a;
+
                 generatedNumbers.Add(x);
             }
 
@@ -30,8 +33,7 @@
 
         public double functionValue(double x)
         {
-            //return 1 / (_sigma * Math.Sqrt(2 * Math.PI)) * Math.Exp(-(Math.Pow((x - _a), 2) / 2 * Math.Pow(_sigma, 2)));
-            return 1 / 2 * (1 + ErfHelper.Erf((x - _a) / (_sigma * Math.Sqrt(2))));
+            return (1 + ErfHelper.Erf((x - _a) / (Math.Sqrt(2) * _sigma))) / 2;
         }
     }
 }

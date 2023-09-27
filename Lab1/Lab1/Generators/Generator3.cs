@@ -1,8 +1,6 @@
-﻿using System.Reflection.Metadata.Ecma335;
-
-namespace Lab1.Generators
+﻿namespace Lab1.Generators
 {
-    public class Generator3 : IGenerator
+    public class Generator3 : IGenerator //equal
     {
         private double _a = Math.Pow(5, 13);
         private double _c = Math.Pow(2, 31);
@@ -17,15 +15,20 @@ namespace Lab1.Generators
             {
                 z = (_a * z) % _c;
                 x = z / _c;
-                Console.WriteLine(x);
+                generatedNumbers.Add(x);
             }
-            
+            Console.WriteLine(generatedNumbers[0]);
             return generatedNumbers;
         }
 
         public double functionValue(double x)
         {
-            throw new NotImplementedException();
+            if (x < 0)
+                return 0;
+            else if (x > 1)
+                return 1;
+            else
+                return x;
         }
     }
 }

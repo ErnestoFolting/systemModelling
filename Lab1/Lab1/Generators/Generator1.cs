@@ -1,8 +1,8 @@
 ﻿namespace Lab1.Generators
 {
-    public class Generator1 : IGenerator
+    public class Generator1 : IGenerator //Exponencial
     {
-        private const double _lambda = 0.5;
+        private const double _lambda = 100;
         public List<double> Generate(int numbersToGenerate)
         {
             List<double> generatedNumbers = new List<double>();
@@ -14,7 +14,6 @@
             {
                 double randomNumber = random.NextDouble();
                 x = (-1 / _lambda) * Math.Log(randomNumber);
-                Console.WriteLine(x);
                 generatedNumbers.Add(x);
             }
 
