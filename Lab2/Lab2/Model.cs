@@ -68,9 +68,10 @@ namespace Lab2
                 if (el.GetType() == typeof(ProcessElement))
                 {
                     ProcessElement p = (ProcessElement)el;
+                    Console.WriteLine("\n\n\n" + p.elementName + ":");
                     Console.WriteLine("Mean queue length: " + p.meanQueueSize / timeCurrent + 
                         "\nFailure probability: " + p.failureElements / (double)p.exitedElements + 
-                        "\nLoading " + p.timeInWork / timeCurrent);
+                        "\nLoading " + p.timeInWork / timeCurrent + "\n\n\n");
                 }
             });
         }

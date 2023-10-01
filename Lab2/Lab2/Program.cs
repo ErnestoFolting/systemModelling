@@ -8,24 +8,27 @@ namespace Lab2
         static void Main(string[] args)
         {
             double meanDelay = 5; 
-            IDelayProvider constDelayProvider = new ExponentialDelayProvider(meanDelay);
-            IDelayProvider constDelayProvider2 = new ExponentialDelayProvider(meanDelay);
+            IDelayProvider ConstantValueProvider = new ExponentialDelayProvider(meanDelay);
 
-            CreateElement createElement = new CreateElement(constDelayProvider);
-            ProcessElement processElement = new ProcessElement(constDelayProvider2);
+            CreateElement createElement = new CreateElement(ConstantValueProvider);
+            ProcessElement processElement = new ProcessElement(ConstantValueProvider);
+            ProcessElement processElement2 = new ProcessElement(ConstantValueProvider);
 
             createElement.nextElement = processElement;
+            processElement.nextElement = processElement2;
 
             processElement.maxQueueSize = 5;  // max queue size
+            processElement2.maxQueueSize = 5;  // max queue size
 
             createElement.elementName = "CREATOR";
-            processElement.elementName = "PROCESSOR";
+            processElement.elementName = "PROCESSOR1";
+            processElement2.elementName = "PROCESSOR2";
 
 
-            List<Element> elements = new List<Element>() { createElement, processElement };
+            List<Element> elements = new List<Element>() { createElement, processElement, processElement2 };
             Model model = new Model(elements);
 
-            model.Simulation(10);
+            model.Simulation(20);
         }
     }
 }

@@ -14,6 +14,7 @@ namespace Lab2.Elements
         {
             currentQueueSize = 0;
             meanQueueSize = 0.0;
+            base.timeNext = double.MaxValue;
         }
 
         public override void Enter()
@@ -47,6 +48,7 @@ namespace Lab2.Elements
                 isServing = true;
                 timeNext = timeCurrent + getDelay();
             }
+            if (nextElement != null)nextElement.Enter();
         }
 
         public override void PrintStat()
