@@ -9,6 +9,7 @@ namespace Lab2.Elements
         public int maxQueueSize {  get; set; }
         public int failureElements{  get; private set; }
         public double meanQueueSize{  get; private set; }
+        public double timeInWork { get; private set; }
         public ProcessElement(IDelayProvider delayProvider) : base(delayProvider)
         {
             currentQueueSize = 0;
@@ -57,11 +58,12 @@ namespace Lab2.Elements
         public override void EvaluateStats(double delta)
         {
             meanQueueSize += currentQueueSize * delta;
+            if (base.isServing) timeInWork += delta;
         }
 
         public override void PrintCurrentStat()
         {
-            string statOfServing = isServing ? " is serving " : "is waiting ";
+            string statOfServing = isServing ? " is serving " : " is waiting ";
             Console.WriteLine(elementName + statOfServing + " already served " + exitedElements + " time of next exit " + timeNext);
         }
     }

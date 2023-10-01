@@ -69,7 +69,8 @@ namespace Lab2
                 {
                     ProcessElement p = (ProcessElement)el;
                     Console.WriteLine("Mean queue length: " + p.meanQueueSize / timeCurrent + 
-                        "\nfailure probability: " + p.failureElements / (double)p.exitedElements);
+                        "\nFailure probability: " + p.failureElements / (double)p.exitedElements + 
+                        "\nLoading " + p.timeInWork / timeCurrent);
                 }
             });
         }
