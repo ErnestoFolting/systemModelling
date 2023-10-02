@@ -10,11 +10,16 @@ namespace Lab2.Elements
         public int failureElements{  get; private set; }
         public double meanQueueSize{  get; private set; }
         public double timeInWork { get; private set; }
-        public ProcessElement(IDelayProvider delayProvider) : base(delayProvider)
+        public List<ProcessPart> processParts { get; private set; } = new();
+        public ProcessElement(IDelayProvider delayProvider, int processPartsCount) : base(delayProvider)
         {
             currentQueueSize = 0;
             meanQueueSize = 0.0;
             base.timeNext = double.MaxValue;
+            for (int i = 0; i < processPartsCount; i++)
+            {
+                processParts.Add(new ProcessPart(i));
+            }
         }
 
         public override void Enter()

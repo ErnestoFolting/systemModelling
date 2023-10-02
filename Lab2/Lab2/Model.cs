@@ -71,7 +71,8 @@ namespace Lab2
                     Console.WriteLine("\n\n\n" + p.elementName + ":");
                     Console.WriteLine("Mean queue length: " + p.meanQueueSize / timeCurrent + 
                         "\nFailure probability: " + p.failureElements / (double)p.exitedElements + 
-                        "\nLoading " + p.timeInWork / timeCurrent + "\n\n\n");
+                        "\nLoading " + p.timeInWork / timeCurrent + 
+                        "\nAvg serving time " + p.timeInWork / p.exitedElements + "\n\n\n");
                 }
             });
         }
