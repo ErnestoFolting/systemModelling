@@ -6,11 +6,10 @@ namespace Lab2.Elements
     public abstract class Element
     {
         public string elementName { get;  set; }
-        public double timeNext { get; protected set; }
+        public virtual double timeNext { get; set; }
         public IDelayProvider delayProvider { get; private set; }
         public int exitedElements { get; protected set; }
         public double timeCurrent { get; set; }
-        public bool isServing { get; protected set; }
         public Element nextElement { get; set; }
         public static int nextElementId { get; private set; }
         public int elementId{ get; private set; }
@@ -20,7 +19,6 @@ namespace Lab2.Elements
             timeNext = 0.0;
             this.delayProvider = delayProvider;
             timeCurrent = timeNext;
-            isServing = false;
             nextElement = null;
             elementId = nextElementId;
             nextElementId++;
@@ -35,13 +33,13 @@ namespace Lab2.Elements
         public abstract void Enter();
         public virtual void Exit()
         {
-            exitedElements++;;
+            exitedElements++;
         }
         public abstract void EvaluateStats(double delta);
 
         public virtual void PrintStat()
         {
-            Console.WriteLine(elementName + " exited " + exitedElements);
+            Console.WriteLine(elementName + " exited " + exitedElements + "\n");
         }
 
         public abstract void PrintCurrentStat();

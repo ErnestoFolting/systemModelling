@@ -8,12 +8,13 @@ namespace Lab2
         static void Main(string[] args)
         {
             double meanDelay = 5; 
-            IDelayProvider ExponentialDelayProvider = new ExponentialDelayProvider(meanDelay);
+            IDelayProvider ExponentialDelayProvider1 = new ExponentialDelayProvider(1);
+            IDelayProvider ExponentialDelayProvider2 = new ExponentialDelayProvider(meanDelay);
 
-            CreateElement createElement = new CreateElement(ExponentialDelayProvider);
-            ProcessElement processElement = new ProcessElement(ExponentialDelayProvider);
-            ProcessElement processElement2 = new ProcessElement(ExponentialDelayProvider);
-            ProcessElement processElement3 = new ProcessElement(ExponentialDelayProvider);
+            CreateElement createElement = new CreateElement(ExponentialDelayProvider1);
+            ProcessElement processElement = new ProcessElement(ExponentialDelayProvider2, 3);
+            ProcessElement processElement2 = new ProcessElement(ExponentialDelayProvider2, 1);
+            ProcessElement processElement3 = new ProcessElement(ExponentialDelayProvider2, 1);
 
             createElement.nextElement = processElement;
             processElement.nextElement = processElement2;
