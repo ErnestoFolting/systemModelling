@@ -1,4 +1,5 @@
 ﻿using Lab2.DistributionHelpers;
+using Lab2.Helpers;
 using System.Text;
 
 namespace Lab2.Elements
@@ -90,7 +91,11 @@ namespace Lab2.Elements
                 part.timeNext = partNextTime;
                 part.isServing = true;
             }
-            if (nextElement != null)nextElement.Enter();
+            if (nextElements.Count != 0) {
+                ProcessElement next = WeightedRandomHelper.GetRandomNext(nextElements);
+                next.Enter();
+                Console.WriteLine("From " + this.elementName + " to " + next.elementName);
+            };
         }
 
         public override void PrintStat()

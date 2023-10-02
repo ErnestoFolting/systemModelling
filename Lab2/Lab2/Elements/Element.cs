@@ -1,5 +1,6 @@
 ﻿using Lab2.DistributionHelpers;
 using Lab2.Enums;
+using System.ComponentModel;
 
 namespace Lab2.Elements
 {
@@ -10,7 +11,7 @@ namespace Lab2.Elements
         public IDelayProvider delayProvider { get; private set; }
         public int exitedElements { get; protected set; }
         public double timeCurrent { get; set; }
-        public Element nextElement { get; set; }
+        public List<(ProcessElement element, double chance)> nextElements { get; private set; } = new();
         public static int nextElementId { get; private set; }
         public int elementId{ get; private set; }
 
@@ -19,10 +20,14 @@ namespace Lab2.Elements
             timeNext = 0.0;
             this.delayProvider = delayProvider;
             timeCurrent = timeNext;
-            nextElement = null;
             elementId = nextElementId;
             nextElementId++;
             elementName = "Element " + elementId;
+        }
+
+        public void AddNextElement(ProcessElement element, double chance)
+        {
+            nextElements.Add((element, chance));
         }
 
         public double getDelay()

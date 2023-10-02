@@ -1,4 +1,5 @@
 ﻿using Lab2.DistributionHelpers;
+using Lab2.Helpers;
 
 namespace Lab2.Elements
 {
@@ -18,7 +19,13 @@ namespace Lab2.Elements
         {
             base.Exit();
             timeNext = timeCurrent + getDelay();
-            nextElement.Enter();
+
+            if (nextElements.Count != 0)
+            {
+                ProcessElement next = WeightedRandomHelper.GetRandomNext(nextElements);
+                next.Enter();
+                Console.WriteLine("From " + this.elementName + " to " + next.elementName);
+            }
         }
 
         public override void EvaluateStats(double delta)
