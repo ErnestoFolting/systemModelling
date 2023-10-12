@@ -1,19 +1,17 @@
 ﻿using Lab2.DistributionHelpers;
-using Lab2.Enums;
-using System.ComponentModel;
 
 namespace Lab2.Elements
 {
     public abstract class Element
     {
-        public string elementName { get;  set; }
+        public string elementName { get; set; }
         public virtual double timeNext { get; set; }
         public IDelayProvider delayProvider { get; private set; }
         public int exitedElements { get; protected set; }
         public double timeCurrent { get; set; }
         public List<(ProcessElement element, double chance)> nextElements { get; private set; } = new();
         public static int nextElementId { get; private set; }
-        public int elementId{ get; private set; }
+        public int elementId { get; private set; }
 
         public Element(IDelayProvider delayProvider)
         {

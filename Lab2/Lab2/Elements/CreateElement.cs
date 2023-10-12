@@ -15,6 +15,7 @@ namespace Lab2.Elements
         {
 
         }
+
         public override void Exit()
         {
             base.Exit();

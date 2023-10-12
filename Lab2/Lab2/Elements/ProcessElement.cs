@@ -54,7 +54,7 @@ namespace Lab2.Elements
         {
             if (!isFullLoaded)
             {
-                ProcessPart part = processParts.Find(el => !el.isServing); //find first free part
+                ProcessPart? part = processParts.Find(el => !el.isServing); //find first free part
                 double partNextTime = timeCurrent + getDelay();
                 part.timeNext = partNextTime;
                 part.isServing = true;
@@ -77,7 +77,7 @@ namespace Lab2.Elements
             base.Exit();
 
             var partsToExit = processParts.FindAll(el => el.timeNext == this.timeNext);
-            base.exitedElements += partsToExit.Count() - 1; //because 1 added in base
+            base.exitedElements += partsToExit.Count() - 1; //because 1 added in base class
 
             partsToExit.ForEach(el =>
             {
@@ -85,6 +85,7 @@ namespace Lab2.Elements
                 el.isServing = false;
             });
 
+            //take new element from the queue
             if(currentQueueSize > 0)
             {
                 currentQueueSize--;
@@ -93,6 +94,8 @@ namespace Lab2.Elements
                 part.timeNext = partNextTime;
                 part.isServing = true;
             }
+
+            //transfer element to the next ProcessElement
             if (nextElements.Count != 0) {
                 ProcessElement next = WeightedRandomHelper.GetRandomNext(nextElements);
                 next.Enter();
