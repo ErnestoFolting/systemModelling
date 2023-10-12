@@ -1,4 +1,4 @@
-﻿namespace Lab2.DistributionHelpers
+﻿namespace Lab3.DistributionHelpers
 {
     public interface IDelayProvider
     {

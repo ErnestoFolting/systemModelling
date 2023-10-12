@@ -1,4 +1,4 @@
-﻿namespace Lab2.Elements
+﻿namespace Lab3.Elements
 {
     public class ProcessPart
     {

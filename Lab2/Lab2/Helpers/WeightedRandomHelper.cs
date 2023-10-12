@@ -1,6 +1,6 @@
-﻿using Lab2.Elements;
+﻿using Lab3.Elements;
 
-namespace Lab2.Helpers
+namespace Lab3.Helpers
 {
     public class WeightedRandomHelper
     {
@@ -19,7 +19,7 @@ namespace Lab2.Helpers
                     return nextElements[i].element;
                 }
             }
-            return default(ProcessElement);
+            return default;
         }
     }
 }

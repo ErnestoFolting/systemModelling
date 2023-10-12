@@ -1,22 +1,24 @@
-﻿using Lab2.DistributionHelpers;
-using Lab2.Helpers;
+﻿using Lab3.DistributionHelpers;
+using Lab3.Enums;
+using Lab3.Helpers;
 using System.Text;
 
-namespace Lab2.Elements
+namespace Lab3.Elements
 {
     public class ProcessElement : Element
     {
-        public int currentQueueSize{  get; private set; }
-        public int maxQueueSize {  get; set; }
-        public int failureElements{  get; private set; }
-        public double meanQueueSize{  get; private set; }
+        public int currentQueueSize { get; private set; }
+        public int maxQueueSize { get; set; }
+        public int failureElements { get; private set; }
+        public double meanQueueSize { get; private set; }
         public double timeInWork { get; private set; }
         public double avgWorkingParts { get; private set; }
 
         public override double timeNext
         {
-            get {
-                return processParts.Count > 0 ? processParts.Min(el => el.timeNext) : double.MaxValue; 
+            get
+            {
+                return processParts.Count > 0 ? processParts.Min(el => el.timeNext) : double.MaxValue;
             }
         }
         public bool isServing
@@ -61,7 +63,7 @@ namespace Lab2.Elements
             }
             else
             {
-                if(currentQueueSize < maxQueueSize)
+                if (currentQueueSize < maxQueueSize)
                 {
                     currentQueueSize++;
                 }
@@ -72,21 +74,23 @@ namespace Lab2.Elements
             }
         }
 
-        public override void Exit()
+        public override void Exit(NextElementChoosingRule rule)
         {
-            base.Exit();
+            base.Exit(rule);
 
-            var partsToExit = processParts.FindAll(el => el.timeNext == this.timeNext);
-            base.exitedElements += partsToExit.Count() - 1; //because 1 added in base class
+            Console.WriteLine(rule);
+
+            var partsToExit = processParts.FindAll(el => el.timeNext == timeNext);
+            exitedElements += partsToExit.Count() - 1; //because 1 added in base class
 
             partsToExit.ForEach(el =>
             {
-                el.timeNext = Double.MaxValue;
+                el.timeNext = double.MaxValue;
                 el.isServing = false;
             });
 
             //take new element from the queue
-            if(currentQueueSize > 0)
+            if (currentQueueSize > 0)
             {
                 currentQueueSize--;
                 ProcessPart part = processParts.Find(el => !el.isServing); //find first free part
@@ -96,10 +100,11 @@ namespace Lab2.Elements
             }
 
             //transfer element to the next ProcessElement
-            if (nextElements.Count != 0) {
+            if (nextElements.Count != 0)
+            {
                 ProcessElement next = WeightedRandomHelper.GetRandomNext(nextElements);
                 next.Enter();
-                Console.WriteLine("From " + this.elementName + " to " + next.elementName);
+                Console.WriteLine("From " + elementName + " to " + next.elementName);
             };
         }
 

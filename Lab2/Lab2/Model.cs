@@ -1,6 +1,7 @@
-﻿using Lab2.Elements;
+﻿using Lab3.Elements;
+using Lab3.Enums;
 
-namespace Lab2
+namespace Lab3
 {
     public class Model
     {
@@ -8,20 +9,24 @@ namespace Lab2
         public double timeNext;
         public double timeCurrent;
         int nextEventId;
+        private NextElementChoosingRule nextElementChoosingRule;
 
-        public Model(List<Element> elements)
+
+        public Model(List<Element> elements, NextElementChoosingRule nextElementChoosingRule)
         {
             this.elements = elements;
             timeNext = 0;
             nextEventId = 0;
             timeCurrent = timeNext;
+            this.nextElementChoosingRule = nextElementChoosingRule;
         }
 
         public void Simulation(double timeOfSimulation)
         {
-            while(timeCurrent < timeOfSimulation) {
-                timeNext = Double.MaxValue;
-                foreach(Element element in elements)
+            while (timeCurrent < timeOfSimulation)
+            {
+                timeNext = double.MaxValue;
+                foreach (Element element in elements)
                 {
                     if (element.timeNext < timeNext)
                     {
@@ -33,7 +38,7 @@ namespace Lab2
                 Element? nextElement = elements.Find(el => el.elementId == nextEventId);
 
                 Console.WriteLine("\n\n\nNext will be event in " + nextElement?.elementName + " , time of this event = " + timeNext);
-                foreach(Element element in elements)
+                foreach (Element element in elements)
                 {
                     element.EvaluateStats(timeNext - timeCurrent);
                 }
@@ -46,7 +51,7 @@ namespace Lab2
 
                 elements.ForEach(el =>
                 {
-                    if(el.timeNext == timeCurrent) el.Exit();
+                    if (el.timeNext == timeCurrent) el.Exit(nextElementChoosingRule);
                 });
                 Console.WriteLine("...Current time: " + timeCurrent);
                 PrintCurrentStats();
@@ -69,11 +74,11 @@ namespace Lab2
                 {
                     ProcessElement p = (ProcessElement)el;
                     Console.WriteLine("\n\n" + p.elementName + ":");
-                    Console.WriteLine("Mean queue length: " + p.meanQueueSize / timeCurrent + 
-                        "\nFailure probability: " + p.failureElements / (double)(p.exitedElements + p.failureElements) + 
-                        "\nLoading " + p.timeInWork / timeCurrent + 
+                    Console.WriteLine("Mean queue length: " + p.meanQueueSize / timeCurrent +
+                        "\nFailure probability: " + p.failureElements / (double)(p.exitedElements + p.failureElements) +
+                        "\nLoading " + p.timeInWork / timeCurrent +
                         "\nAvg serving time " + p.timeInWork / p.exitedElements +
-                        "\nAvg parts in work " + p.avgWorkingParts / timeCurrent +  "\n\n\n");
+                        "\nAvg parts in work " + p.avgWorkingParts / timeCurrent + "\n\n\n");
                 }
             });
         }

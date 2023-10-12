@@ -1,6 +1,7 @@
-﻿using Lab2.DistributionHelpers;
+﻿using Lab3.DistributionHelpers;
+using Lab3.Enums;
 
-namespace Lab2.Elements
+namespace Lab3.Elements
 {
     public abstract class Element
     {
@@ -34,7 +35,7 @@ namespace Lab2.Elements
         }
 
         public abstract void Enter();
-        public virtual void Exit()
+        public virtual void Exit(NextElementChoosingRule rule)
         {
             exitedElements++;
         }

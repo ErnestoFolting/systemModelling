@@ -1,4 +1,4 @@
-﻿namespace Lab2.Enums
+﻿namespace Lab3.Enums
 {
     public enum DistributionEnum
     {

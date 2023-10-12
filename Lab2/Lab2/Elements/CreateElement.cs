@@ -1,11 +1,12 @@
-﻿using Lab2.DistributionHelpers;
-using Lab2.Helpers;
+﻿using Lab3.DistributionHelpers;
+using Lab3.Enums;
+using Lab3.Helpers;
 
-namespace Lab2.Elements
+namespace Lab3.Elements
 {
     public class CreateElement : Element
     {
-        public CreateElement(IDelayProvider delayProvider) 
+        public CreateElement(IDelayProvider delayProvider)
             : base(delayProvider)
         {
             timeNext = 0.0;
@@ -16,22 +17,23 @@ namespace Lab2.Elements
 
         }
 
-        public override void Exit()
+        public override void Exit(NextElementChoosingRule rule)
         {
-            base.Exit();
+            base.Exit(rule);
+            Console.WriteLine(rule);
             timeNext = timeCurrent + getDelay();
 
             if (nextElements.Count != 0)
             {
                 ProcessElement next = WeightedRandomHelper.GetRandomNext(nextElements);
                 next.Enter();
-                Console.WriteLine("From " + this.elementName + " to " + next.elementName);
+                Console.WriteLine("From " + elementName + " to " + next.elementName);
             }
         }
 
         public override void EvaluateStats(double delta)
         {
-            
+
         }
 
         public override void PrintCurrentStat()
