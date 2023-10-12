@@ -18,7 +18,7 @@ namespace Lab3
             ProcessElement processElement2 = new ProcessElement(ExponentialDelayProvider2, 1);
 
             createElement.AddNextElement(processElement1, 1);
-            createElement.AddNextElement(processElement2, 1);
+            createElement.AddNextElement(processElement2, 2);
 
             processElement1.maxQueueSize = 3;  // max queue size
             processElement2.maxQueueSize = 3;  // max queue size
@@ -29,7 +29,7 @@ namespace Lab3
 
 
             List<Element> elements = new List<Element>() { createElement, processElement1, processElement2 };
-            Model model = new Model(elements, NextElementChoosingRule.byChance);
+            Model model = new Model(elements, NextElementChoosingRule.byPriority);
 
             model.Simulation(1000);
         }

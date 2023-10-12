@@ -47,8 +47,6 @@ namespace Lab3
 
                 elements.ForEach(el => el.timeCurrent = timeCurrent);
 
-                //nextElement.Exit();
-
                 elements.ForEach(el =>
                 {
                     if (el.timeNext == timeCurrent) el.Exit(nextElementChoosingRule);

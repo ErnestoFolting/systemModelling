@@ -19,16 +19,9 @@ namespace Lab3.Elements
 
         public override void Exit(NextElementChoosingRule rule)
         {
-            base.Exit(rule);
-            Console.WriteLine(rule);
             timeNext = timeCurrent + getDelay();
 
-            if (nextElements.Count != 0)
-            {
-                ProcessElement next = WeightedRandomHelper.GetRandomNext(nextElements);
-                next.Enter();
-                Console.WriteLine("From " + elementName + " to " + next.elementName);
-            }
+            base.Exit(rule);
         }
 
         public override void EvaluateStats(double delta)
