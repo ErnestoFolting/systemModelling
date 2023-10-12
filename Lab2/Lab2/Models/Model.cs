@@ -1,8 +1,7 @@
 ﻿using Lab3.Elements;
 using Lab3.Enums;
-using Lab3.Helpers.StatsOutput;
 
-namespace Lab3
+namespace Lab3.Models
 {
     public class Model
     {
@@ -11,25 +10,20 @@ namespace Lab3
         public double timeCurrent;
         int nextEventId;
         private NextElementChoosingRule nextElementChoosingRule;
-        private IStatsOutputHelper statsOutputHelper;
-        private bool ifCanChangeQueue;
 
-        public Model(List<Element> elements, NextElementChoosingRule nextElementChoosingRule, IStatsOutputHelper statsOutputHelper, bool ifCanChangeQueue)
+        public Model(List<Element> elements, NextElementChoosingRule nextElementChoosingRule)
         {
             this.elements = elements;
             timeNext = 0;
             nextEventId = 0;
             timeCurrent = timeNext;
             this.nextElementChoosingRule = nextElementChoosingRule;
-            this.statsOutputHelper = statsOutputHelper;
-            this.ifCanChangeQueue = ifCanChangeQueue;
         }
 
-        public void Simulation(double timeOfSimulation)
+        public void Simulation(double timeOfSimulation, Action<double>? actionPerIteration)
         {
             while (timeCurrent < timeOfSimulation)
             {
-                if(ifCanChangeQueue) ChangeQueue();
                 timeNext = double.MaxValue;
                 foreach (Element element in elements)
                 {
@@ -40,12 +34,16 @@ namespace Lab3
                     }
                 }
 
+                double timeDelta = timeNext - timeCurrent;
+
+                if (actionPerIteration != null) actionPerIteration(timeDelta);
+
                 Element? nextElement = elements.Find(el => el.elementId == nextEventId);
 
                 Console.WriteLine("\n\n\nNext will be event in " + nextElement?.elementName + " , time of this event = " + timeNext);
                 foreach (Element element in elements)
                 {
-                    element.EvaluateStats(timeNext - timeCurrent);
+                    element.EvaluateStats(timeDelta);
                 }
 
                 timeCurrent = timeNext;
@@ -58,32 +56,14 @@ namespace Lab3
                 });
                 Console.WriteLine("...Current time: " + timeCurrent);
                 PrintCurrentStats();
+
             }
             PrintResult();
-            statsOutputHelper.GetStats();
         }
 
         private void PrintCurrentStats()
         {
             elements.ForEach(el => el.PrintCurrentStat());
-        }
-
-        private void ChangeQueue()
-        {
-            IEnumerable<ProcessElement> processElements = elements.OfType<ProcessElement>();
-
-            ProcessElement? maxQueueSizeElement = processElements.OrderByDescending(el => el.currentQueueSize).FirstOrDefault();
-            ProcessElement? minQueueSizeElement = processElements.OrderBy(el => el.currentQueueSize).FirstOrDefault();
-
-            if (maxQueueSizeElement?.currentQueueSize  - minQueueSizeElement?.currentQueueSize >= 2)
-            {
-                maxQueueSizeElement.currentQueueSize--;
-                minQueueSizeElement.currentQueueSize++;
-                Console.ForegroundColor = ConsoleColor.Green;
-                Console.WriteLine("****************************************Element changed the queue****************************************");
-                Console.ForegroundColor = ConsoleColor.Gray;
-                ProcessElement.queueChanges++;
-            }
         }
 
         private void PrintResult()

@@ -1,7 +1,4 @@
-﻿using Lab3.DistributionHelpers;
-using Lab3.Elements;
-using Lab3.Enums;
-using Lab3.Helpers.StatsOutput;
+﻿using Lab3.Models;
 
 namespace Lab3
 {
@@ -9,31 +6,8 @@ namespace Lab3
     {
         static void Main(string[] args)
         {
-
-            //bank task
-            IDelayProvider ExponentialDelayProvider1 = new ExponentialDelayProvider(0.5);
-            IDelayProvider ExponentialDelayProvider2 = new ExponentialDelayProvider(0.3);
-
-            CreateElement createElement = new CreateElement(ExponentialDelayProvider1);
-            ProcessElement processElement1 = new ProcessElement(ExponentialDelayProvider2, 1);
-            ProcessElement processElement2 = new ProcessElement(ExponentialDelayProvider2, 1);
-
-            createElement.AddNextElement(processElement1, 1);
-            createElement.AddNextElement(processElement2, 1);
-
-            processElement1.maxQueueSize = 3;  // max queue size
-            processElement2.maxQueueSize = 3;  // max queue size
-
-            createElement.elementName = "CREATOR";
-            processElement1.elementName = "PROCESSOR1";
-            processElement2.elementName = "PROCESSOR2";
-
-
-            List<Element> elements = new List<Element>() { createElement, processElement1, processElement2 };
-            IStatsOutputHelper statsOutputHelper = new BankStatsOutputHelper(elements);
-            Model model = new Model(elements, NextElementChoosingRule.byPriority, statsOutputHelper, true);
-
-            model.Simulation(1000);
+            BankModel bank = new BankModel();
+            bank.StartSimulation();
         }
     }
 }
