@@ -11,6 +11,7 @@ namespace Lab2.Elements
         public int failureElements{  get; private set; }
         public double meanQueueSize{  get; private set; }
         public double timeInWork { get; private set; }
+        public double avgWorkingParts { get; private set; }
 
         public override double timeNext
         {
@@ -41,6 +42,7 @@ namespace Lab2.Elements
         {
             currentQueueSize = 0;
             meanQueueSize = 0.0;
+            avgWorkingParts = 0.0;
             base.timeNext = double.MaxValue;
             for (int i = 0; i < processPartsCount; i++)
             {
@@ -107,7 +109,11 @@ namespace Lab2.Elements
         public override void EvaluateStats(double delta)
         {
             meanQueueSize += currentQueueSize * delta;
-            if (isServing) timeInWork += delta;
+            if (isServing)
+            {
+                timeInWork += delta;
+                avgWorkingParts += processParts.Count(el => el.isServing) * delta;
+            }
         }
 
         public override void PrintCurrentStat()
