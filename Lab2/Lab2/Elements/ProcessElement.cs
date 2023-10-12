@@ -7,12 +7,13 @@ namespace Lab3.Elements
 {
     public class ProcessElement : Element
     {
-        public int currentQueueSize { get; private set; }
+        public int currentQueueSize { get; set; }
         public int maxQueueSize { get; set; }
         public int failureElements { get; private set; }
         public double meanQueueSize { get; private set; }
         public double timeInWork { get; private set; }
         public double avgWorkingParts { get; private set; }
+        public static int queueChanges { get; set; }
 
         public override double timeNext
         {

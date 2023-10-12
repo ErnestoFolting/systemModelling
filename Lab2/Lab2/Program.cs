@@ -1,6 +1,7 @@
 ﻿using Lab3.DistributionHelpers;
 using Lab3.Elements;
 using Lab3.Enums;
+using Lab3.Helpers.StatsOutput;
 
 namespace Lab3
 {
@@ -18,7 +19,7 @@ namespace Lab3
             ProcessElement processElement2 = new ProcessElement(ExponentialDelayProvider2, 1);
 
             createElement.AddNextElement(processElement1, 1);
-            createElement.AddNextElement(processElement2, 2);
+            createElement.AddNextElement(processElement2, 1);
 
             processElement1.maxQueueSize = 3;  // max queue size
             processElement2.maxQueueSize = 3;  // max queue size
@@ -29,7 +30,8 @@ namespace Lab3
 
 
             List<Element> elements = new List<Element>() { createElement, processElement1, processElement2 };
-            Model model = new Model(elements, NextElementChoosingRule.byPriority);
+            IStatsOutputHelper statsOutputHelper = new BankStatsOutputHelper(elements);
+            Model model = new Model(elements, NextElementChoosingRule.byPriority, statsOutputHelper, true);
 
             model.Simulation(1000);
         }
