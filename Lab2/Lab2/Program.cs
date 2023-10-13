@@ -8,6 +8,9 @@ namespace Lab3
         {
             BankModel bank = new BankModel();
             bank.StartSimulation();
+
+            //HospitalModel hospital = new HospitalModel();
+            //hospital.StartSimulation();
         }
     }
 }

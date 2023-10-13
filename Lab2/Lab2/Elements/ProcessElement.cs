@@ -1,13 +1,13 @@
 ﻿using Lab3.DistributionHelpers;
 using Lab3.Enums;
+using Lab3.GeneratingElements.Elements;
 using Lab3.Helpers;
-using System.Text;
 
 namespace Lab3.Elements
 {
     public class ProcessElement : Element
     {
-        public int currentQueueSize { get; set; }
+        public List<IGeneratedElement> queue = new List<IGeneratedElement>();
         public int maxQueueSize { get; set; }
         public int failureElements { get; private set; }
         public double meanQueueSize { get; private set; }
@@ -43,7 +43,6 @@ namespace Lab3.Elements
         public List<ProcessPart> processParts { get; private set; } = new();
         public ProcessElement(IDelayProvider delayProvider, int processPartsCount) : base(delayProvider)
         {
-            currentQueueSize = 0;
             meanQueueSize = 0.0;
             avgWorkingParts = 0.0;
             base.timeNext = double.MaxValue;
@@ -53,20 +52,21 @@ namespace Lab3.Elements
             }
         }
 
-        public override void Enter()
+        public override void Enter(IGeneratedElement generatedElement)
         {
             if (!isFullLoaded)
             {
                 ProcessPart? part = processParts.Find(el => !el.isServing); //find first free part
-                double partNextTime = timeCurrent + getDelay();
+                double partNextTime = timeCurrent + getDelay(generatedElement.GetType());
                 part.timeNext = partNextTime;
                 part.isServing = true;
+                part.elementOnServing = generatedElement;
             }
             else
             {
-                if (currentQueueSize < maxQueueSize)
+                if (queue.Count < maxQueueSize)
                 {
-                    currentQueueSize++;
+                    queue.Add(generatedElement);
                 }
                 else
                 {
@@ -78,26 +78,62 @@ namespace Lab3.Elements
         public override void Exit(NextElementChoosingRule rule)
         {
             var partsToExit = processParts.FindAll(el => el.timeNext == timeNext);
-            exitedElements += partsToExit.Count() - 1; //because 1 added in base class
+            exitedElements += partsToExit.Count();
 
             partsToExit.ForEach(el =>
             {
                 el.timeNext = double.MaxValue;
                 el.isServing = false;
+                el.elementOnServing = null;
             });
 
+            IGeneratedElement? exitedElement = partsToExit.FirstOrDefault()?.elementOnServing;
+
             //take new element from the queue
-            if (currentQueueSize > 0)
+            if (queue.Count > 0)
             {
-                currentQueueSize--;
+                IGeneratedElement? elementToServe;
+                
+                if(queue.Any(el => el.GetPriority() == 1))
+                {
+                    elementToServe = queue.FirstOrDefault(el => el.GetPriority().Equals(1));
+                }
+                else
+                {
+                    elementToServe = queue.FirstOrDefault();
+
+                }
+                queue.Remove(elementToServe);
+
                 ProcessPart part = processParts.Find(el => !el.isServing); //find first free part
-                double partNextTime = timeCurrent + getDelay();
+                double partNextTime = timeCurrent + getDelay(elementToServe.GetType());
                 part.timeNext = partNextTime;
                 part.isServing = true;
+                part.elementOnServing = elementToServe;
             }
 
             //transfer element to the next ProcessElement
-            base.Exit(rule);
+            if (nextElements.Count != 0)
+            {
+                switch (rule)
+                {
+                    case NextElementChoosingRule.byPriorityOrQueueSize:
+                        ProcessElement nextElement = nextElements.OrderBy(el => el.chance).FirstOrDefault().element; //first priority
+                        if (nextElements.Any(el => el.element.queue.Count < nextElement.queue.Count))
+                        {
+                            nextElement = nextElements.OrderBy(el => el.element.queue.Count).FirstOrDefault().element; //min queue size
+                        };
+                        nextElement.Enter(exitedElement);
+                        Console.WriteLine("From " + elementName + " to " + nextElement.elementName);
+                        break;
+
+                    default:
+                        ProcessElement next = WeightedRandomHelper.GetRandomNextProcess(nextElements);
+                        next.Enter(exitedElement);
+                        Console.WriteLine("From " + elementName + " to " + next.elementName);
+                        break;
+                }
+            };
         }
 
         public override void PrintStat()
@@ -108,7 +144,7 @@ namespace Lab3.Elements
 
         public override void EvaluateStats(double delta)
         {
-            meanQueueSize += currentQueueSize * delta;
+            meanQueueSize += queue.Count * delta;
             if (isServing)
             {
                 timeInWork += delta;

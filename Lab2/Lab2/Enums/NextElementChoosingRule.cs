@@ -2,7 +2,7 @@
 {
     public enum NextElementChoosingRule
     {
-        byPriority = 1,
+        byPriorityOrQueueSize = 1,
         byChance = 2
     }
 }

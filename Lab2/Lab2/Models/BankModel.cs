@@ -1,22 +1,26 @@
 ﻿using Lab3.DistributionHelpers;
 using Lab3.Elements;
 using Lab3.Enums;
+using Lab3.GeneratingElements.Elements;
+using Lab3.GeneratingElements.Generators;
 
 namespace Lab3.Models
 {
-    public class BankModel
+    public class BankModel : IModel
     {
         public List<Element> elements;
         private double avgClientsCount = 0;
 
         public BankModel()
         {
-            IDelayProvider ExponentialDelayProvider1 = new ExponentialDelayProvider(0.3);
-            IDelayProvider ExponentialDelayProvider2 = new ExponentialDelayProvider(0.3);
+            IDelayProvider DelayGenerationClients = new ExponentialDelayProvider(0.3);
+            IDelayProvider DelayServingClients = new ExponentialDelayProvider(0.3);
 
-            CreateElement createElement = new CreateElement(ExponentialDelayProvider1);
-            ProcessElement processElement1 = new ProcessElement(ExponentialDelayProvider2, 1);
-            ProcessElement processElement2 = new ProcessElement(ExponentialDelayProvider2, 1);
+            IElementsGenerator elementGenerator = new DefaultElementsGenerator();
+
+            CreateElement createElement = new CreateElement(DelayGenerationClients, elementGenerator);
+            ProcessElement processElement1 = new ProcessElement(DelayServingClients, 1);
+            ProcessElement processElement2 = new ProcessElement(DelayServingClients, 1);
 
             createElement.AddNextElement(processElement1, 1);
             createElement.AddNextElement(processElement2, 1);
@@ -34,7 +38,7 @@ namespace Lab3.Models
         }
         public void StartSimulation()
         {
-            Model model = new Model(elements, NextElementChoosingRule.byPriority);
+            Model model = new Model(elements, NextElementChoosingRule.byPriorityOrQueueSize);
 
             model.Simulation(1000, ActionPerIteration);
             OutputStats();
@@ -51,20 +55,20 @@ namespace Lab3.Models
             double clientsInMoment = 0;
             List<ProcessElement> processElements = elements.OfType<ProcessElement>().ToList();
             clientsInMoment += processElements.Count(el => el.isServing);
-            processElements.ForEach(el => clientsInMoment += el.currentQueueSize);
+            processElements.ForEach(el => clientsInMoment += el.queue.Count);
             avgClientsCount += clientsInMoment * delta;
         }
 
         private void ChangeQueue()
         {
             IEnumerable<ProcessElement> processElements = elements.OfType<ProcessElement>();
-            ProcessElement? maxQueueSizeElement = processElements.OrderByDescending(el => el.currentQueueSize).FirstOrDefault();
-            ProcessElement? minQueueSizeElement = processElements.OrderBy(el => el.currentQueueSize).FirstOrDefault();
+            ProcessElement? maxQueueSizeElement = processElements.OrderByDescending(el => el.queue.Count).FirstOrDefault();
+            ProcessElement? minQueueSizeElement = processElements.OrderBy(el => el.queue.Count).FirstOrDefault();
 
-            if (maxQueueSizeElement?.currentQueueSize - minQueueSizeElement?.currentQueueSize >= 2)
+            if (maxQueueSizeElement?.queue.Count - minQueueSizeElement?.queue.Count >= 2)
             {
-                maxQueueSizeElement.currentQueueSize--;
-                minQueueSizeElement.currentQueueSize++;
+                maxQueueSizeElement.queue.RemoveAt(1);
+                minQueueSizeElement.queue.Add(new DefaultGeneratedElement(GeneratedElementTypeEnum.Type1));
                 Console.ForegroundColor = ConsoleColor.Green;
                 Console.WriteLine("****************************************Element changed the queue****************************************");
                 Console.ForegroundColor = ConsoleColor.Gray;
