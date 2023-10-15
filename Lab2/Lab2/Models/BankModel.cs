@@ -3,6 +3,8 @@ using Lab3.Elements;
 using Lab3.Enums;
 using Lab3.GeneratingElements.Elements;
 using Lab3.GeneratingElements.Generators;
+using Lab3.NextElementChoosingRules;
+using Lab3.RuleNextElementChoosing;
 
 namespace Lab3.Models
 {
@@ -18,9 +20,11 @@ namespace Lab3.Models
 
             IElementsGenerator elementGenerator = new DefaultElementsGenerator();
 
-            CreateElement createElement = new CreateElement(DelayGenerationClients, elementGenerator);
-            ProcessElement processElement1 = new ProcessElement(DelayServingClients, 1);
-            ProcessElement processElement2 = new ProcessElement(DelayServingClients, 1);
+            IRuleNextElementChoosing ruleNextElementChoosing = new RuleByPriorityOrQueueSize();
+
+            CreateElement createElement = new CreateElement(DelayGenerationClients, elementGenerator, ruleNextElementChoosing);
+            ProcessElement processElement1 = new ProcessElement(DelayServingClients, 1, ruleNextElementChoosing);
+            ProcessElement processElement2 = new ProcessElement(DelayServingClients, 1, ruleNextElementChoosing);
 
             createElement.AddNextElement(processElement1, 1);
             createElement.AddNextElement(processElement2, 1);
@@ -38,7 +42,7 @@ namespace Lab3.Models
         }
         public void StartSimulation()
         {
-            Model model = new Model(elements, NextElementChoosingRule.byPriorityOrQueueSize);
+            Model model = new Model(elements);
 
             model.Simulation(1000, ActionPerIteration);
             OutputStats();

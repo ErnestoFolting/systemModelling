@@ -2,6 +2,7 @@
 using Lab3.Enums;
 using Lab3.GeneratingElements.Elements;
 using Lab3.Helpers;
+using Lab3.NextElementChoosingRules;
 
 namespace Lab3.Elements
 {
@@ -15,8 +16,9 @@ namespace Lab3.Elements
         public List<(ProcessElement element, double chance)> nextElements { get; private set; } = new();
         public static int nextElementId { get; private set; }
         public int elementId { get; private set; }
+        public IRuleNextElementChoosing ruleNextElementChoosing { get; private set; }
 
-        public Element(IDelayProvider delayProvider)
+        public Element(IDelayProvider delayProvider, IRuleNextElementChoosing ruleNextElementChoosing)
         {
             timeNext = 0.0;
             this.delayProvider = delayProvider;
@@ -24,6 +26,7 @@ namespace Lab3.Elements
             elementId = nextElementId;
             nextElementId++;
             elementName = "Element " + elementId;
+            this.ruleNextElementChoosing = ruleNextElementChoosing;
         }
 
         public void AddNextElement(ProcessElement element, double chance)
@@ -46,7 +49,7 @@ namespace Lab3.Elements
 
         public abstract void Enter(IGeneratedElement generatedElement);
 
-        public abstract void Exit(NextElementChoosingRule rule);
+        public abstract void Exit();
 
         public abstract void EvaluateStats(double delta);
 

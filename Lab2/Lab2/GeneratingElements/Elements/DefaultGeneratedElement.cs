@@ -20,5 +20,10 @@ namespace Lab3.GeneratingElements.Elements
         {
             return _type;
         }
+
+        public void SetType(GeneratedElementTypeEnum newType)
+        {
+            _type = newType;
+        }
     }
 }

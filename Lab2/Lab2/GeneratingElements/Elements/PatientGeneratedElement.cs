@@ -16,6 +16,11 @@ namespace Lab3.GeneratingElements.Elements
             return _priority;
         }
 
+        public void SetType(GeneratedElementTypeEnum newType)
+        {
+            _type = newType;
+        }
+
         GeneratedElementTypeEnum IGeneratedElement.GetType()
         {
             return _type;

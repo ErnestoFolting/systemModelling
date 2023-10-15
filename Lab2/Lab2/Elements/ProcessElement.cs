@@ -2,6 +2,7 @@
 using Lab3.Enums;
 using Lab3.GeneratingElements.Elements;
 using Lab3.Helpers;
+using Lab3.NextElementChoosingRules;
 
 namespace Lab3.Elements
 {
@@ -41,7 +42,7 @@ namespace Lab3.Elements
         }
 
         public List<ProcessPart> processParts { get; private set; } = new();
-        public ProcessElement(IDelayProvider delayProvider, int processPartsCount) : base(delayProvider)
+        public ProcessElement(IDelayProvider delayProvider, int processPartsCount, IRuleNextElementChoosing ruleNextElementChoosing) : base(delayProvider, ruleNextElementChoosing)
         {
             meanQueueSize = 0.0;
             avgWorkingParts = 0.0;
@@ -75,10 +76,12 @@ namespace Lab3.Elements
             }
         }
 
-        public override void Exit(NextElementChoosingRule rule)
+        public override void Exit()
         {
             var partsToExit = processParts.FindAll(el => el.timeNext == timeNext);
             exitedElements += partsToExit.Count();
+
+            IGeneratedElement? exitedElement = partsToExit.FirstOrDefault()?.elementOnServing;
 
             partsToExit.ForEach(el =>
             {
@@ -86,8 +89,6 @@ namespace Lab3.Elements
                 el.isServing = false;
                 el.elementOnServing = null;
             });
-
-            IGeneratedElement? exitedElement = partsToExit.FirstOrDefault()?.elementOnServing;
 
             //take new element from the queue
             if (queue.Count > 0)
@@ -101,7 +102,6 @@ namespace Lab3.Elements
                 else
                 {
                     elementToServe = queue.FirstOrDefault();
-
                 }
                 queue.Remove(elementToServe);
 
@@ -113,25 +113,13 @@ namespace Lab3.Elements
             }
 
             //transfer element to the next ProcessElement
-            if (nextElements.Count != 0)
+            if (nextElements.Count != 0 && exitedElement != null)
             {
-                switch (rule)
+                ProcessElement? nextElement = ruleNextElementChoosing.GetNextElement(nextElements, exitedElement);
+                if(nextElement != null)
                 {
-                    case NextElementChoosingRule.byPriorityOrQueueSize:
-                        ProcessElement nextElement = nextElements.OrderBy(el => el.chance).FirstOrDefault().element; //first priority
-                        if (nextElements.Any(el => el.element.queue.Count < nextElement.queue.Count))
-                        {
-                            nextElement = nextElements.OrderBy(el => el.element.queue.Count).FirstOrDefault().element; //min queue size
-                        };
-                        nextElement.Enter(exitedElement);
-                        Console.WriteLine("From " + elementName + " to " + nextElement.elementName);
-                        break;
-
-                    default:
-                        ProcessElement next = WeightedRandomHelper.GetRandomNextProcess(nextElements);
-                        next.Enter(exitedElement);
-                        Console.WriteLine("From " + elementName + " to " + next.elementName);
-                        break;
+                    nextElement.Enter(exitedElement);
+                    Console.WriteLine("From " + elementName + " to " + nextElement.elementName);
                 }
             };
         }

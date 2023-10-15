@@ -6,5 +6,6 @@ namespace Lab3.GeneratingElements.Elements
     {
         public int GetPriority();
         public GeneratedElementTypeEnum GetType();
+        public void SetType(GeneratedElementTypeEnum newType);
     }
 }

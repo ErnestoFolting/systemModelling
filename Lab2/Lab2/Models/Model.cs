@@ -1,5 +1,4 @@
 ﻿using Lab3.Elements;
-using Lab3.Enums;
 
 namespace Lab3.Models
 {
@@ -9,15 +8,13 @@ namespace Lab3.Models
         public double timeNext;
         public double timeCurrent;
         int nextEventId;
-        private NextElementChoosingRule nextElementChoosingRule;
 
-        public Model(List<Element> elements, NextElementChoosingRule nextElementChoosingRule)
+        public Model(List<Element> elements)
         {
             this.elements = elements;
             timeNext = 0;
             nextEventId = 0;
             timeCurrent = timeNext;
-            this.nextElementChoosingRule = nextElementChoosingRule;
         }
 
         public void Simulation(double timeOfSimulation, Action<double>? actionPerIteration)
@@ -52,7 +49,7 @@ namespace Lab3.Models
 
                 elements.ForEach(el =>
                 {
-                    if (el.timeNext == timeCurrent) el.Exit(nextElementChoosingRule);
+                    if (el.timeNext == timeCurrent) el.Exit();
                 });
                 Console.WriteLine("...Current time: " + timeCurrent);
                 PrintCurrentStats();

@@ -3,7 +3,7 @@ using Lab3.Enums;
 using Lab3.GeneratingElements.Elements;
 using Lab3.GeneratingElements.Generators;
 using Lab3.Helpers;
-
+using Lab3.NextElementChoosingRules;
 
 namespace Lab3.Elements
 {
@@ -20,8 +20,8 @@ namespace Lab3.Elements
             {GeneratedElementTypeEnum.Type3,0}
         };
 
-        public CreateElement(IDelayProvider delayProvider, IElementsGenerator generator)
-            : base(delayProvider)
+        public CreateElement(IDelayProvider delayProvider, IElementsGenerator generator, IRuleNextElementChoosing ruleNextElementChoosing)
+            : base(delayProvider, ruleNextElementChoosing)
         {
             timeNext = 0.0;
             _elementsGenerator = generator;
@@ -32,7 +32,7 @@ namespace Lab3.Elements
 
         }
 
-        public override void Exit(NextElementChoosingRule rule)
+        public override void Exit()
         {
             timeNext = timeCurrent + getDelayInCreate();
 
@@ -41,26 +41,12 @@ namespace Lab3.Elements
             CountDict[generatedElement.GetType()]++;
 
             exitedElements++;
+
             if (nextElements.Count != 0)
             {
-                switch (rule)
-                {
-                    case NextElementChoosingRule.byPriorityOrQueueSize:
-                        ProcessElement nextElement = nextElements.OrderBy(el => el.chance).FirstOrDefault().element; //first priority
-                        if (nextElements.Any(el => el.element.queue.Count < nextElement.queue.Count))
-                        {
-                            nextElement = nextElements.OrderBy(el => el.element.queue.Count).FirstOrDefault().element; //min queue size
-                        };
-                        nextElement.Enter(generatedElement);
-                        Console.WriteLine("From " + elementName + " to " + nextElement.elementName + " exited " + generatedElement.GetType());
-                        break;
-
-                    default:
-                        ProcessElement next = WeightedRandomHelper.GetRandomNextProcess(nextElements);
-                        next.Enter(generatedElement);
-                        Console.WriteLine("From " + elementName + " to " + next.elementName + " exited " + generatedElement.GetType());
-                        break;
-                }
+                ProcessElement nextElement = ruleNextElementChoosing.GetNextElement(nextElements,generatedElement);
+                nextElement.Enter(generatedElement);
+                Console.WriteLine("From " + elementName + " to " + nextElement.elementName + " exited " + generatedElement.GetType());
             };
         }
 
