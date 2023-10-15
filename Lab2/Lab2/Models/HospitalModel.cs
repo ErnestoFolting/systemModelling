@@ -9,6 +9,8 @@ namespace Lab3.Models
     {
 
         public List<Element> elements;
+
+        public ProcessElement processELement;
         public HospitalModel()
         {
             IDelayProvider DelayGenerationPatients = new ExponentialDelayProvider(15);
@@ -30,6 +32,8 @@ namespace Lab3.Models
             createElement.elementName = "CREATOR";
             dutyDoctors.elementName = "DUTY_DOCTORS";
 
+            this.processELement = dutyDoctors;
+
 
             elements = new List<Element>() { createElement, dutyDoctors };
         }
@@ -37,7 +41,11 @@ namespace Lab3.Models
         {
             Model model = new Model(elements, NextElementChoosingRule.byPriorityOrQueueSize);
 
-            model.Simulation(10, ActionPerIteration);
+            model.Simulation(10000, ActionPerIteration);
+            Console.WriteLine(CreateElement.CountDict[GeneratedElementTypeEnum.Type1]);
+            Console.WriteLine(CreateElement.CountDict[GeneratedElementTypeEnum.Type2]);
+            Console.WriteLine(CreateElement.CountDict[GeneratedElementTypeEnum.Type3]);
+            Console.WriteLine("\n\n\n" + this.processELement.queue.Count);
         }
 
         private void ActionPerIteration(double delta)

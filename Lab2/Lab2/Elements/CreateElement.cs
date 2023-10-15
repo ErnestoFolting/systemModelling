@@ -4,12 +4,22 @@ using Lab3.GeneratingElements.Elements;
 using Lab3.GeneratingElements.Generators;
 using Lab3.Helpers;
 
+
 namespace Lab3.Elements
 {
+
     public class CreateElement : Element
     {
 
         private IElementsGenerator _elementsGenerator;
+        
+        public static Dictionary<GeneratedElementTypeEnum, int> CountDict = new Dictionary<GeneratedElementTypeEnum, int>()
+        {
+            {GeneratedElementTypeEnum.Type1,0},
+            {GeneratedElementTypeEnum.Type2,0},
+            {GeneratedElementTypeEnum.Type3,0}
+        };
+
         public CreateElement(IDelayProvider delayProvider, IElementsGenerator generator)
             : base(delayProvider)
         {
@@ -28,6 +38,8 @@ namespace Lab3.Elements
 
             IGeneratedElement generatedElement = _elementsGenerator.GenerateElement();
 
+            CountDict[generatedElement.GetType()]++;
+
             exitedElements++;
             if (nextElements.Count != 0)
             {
@@ -40,13 +52,13 @@ namespace Lab3.Elements
                             nextElement = nextElements.OrderBy(el => el.element.queue.Count).FirstOrDefault().element; //min queue size
                         };
                         nextElement.Enter(generatedElement);
-                        Console.WriteLine("From " + elementName + " to " + nextElement.elementName);
+                        Console.WriteLine("From " + elementName + " to " + nextElement.elementName + " exited " + generatedElement.GetType());
                         break;
 
                     default:
                         ProcessElement next = WeightedRandomHelper.GetRandomNextProcess(nextElements);
                         next.Enter(generatedElement);
-                        Console.WriteLine("From " + elementName + " to " + next.elementName);
+                        Console.WriteLine("From " + elementName + " to " + next.elementName + " exited " + generatedElement.GetType());
                         break;
                 }
             };

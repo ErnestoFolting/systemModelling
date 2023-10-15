@@ -13,6 +13,17 @@ namespace Lab3.DistributionHelpers
             throw new NotImplementedException();
         }
 
+        public double GetDelayByType(GeneratedElementTypeEnum elementType)
+        {
+            return elementType switch
+            {
+                GeneratedElementTypeEnum.Type1 => GetDelayWithParams(15),
+                GeneratedElementTypeEnum.Type2 => GetDelayWithParams(40),
+                GeneratedElementTypeEnum.Type3 => GetDelayWithParams(30),
+                _ => 0
+            };
+        }
+
         private double GetDelayWithParams(double timeMean)
         {
             double a = 0;
@@ -23,17 +34,6 @@ namespace Lab3.DistributionHelpers
             }
             a = -timeMean * Math.Log(a);
             return a;
-        }
-
-        public double GetDelayByType(GeneratedElementTypeEnum elementType)
-        {
-            return elementType switch
-            {
-                GeneratedElementTypeEnum.Type1 => GetDelayWithParams(15),
-                GeneratedElementTypeEnum.Type2 => GetDelayWithParams(40),
-                GeneratedElementTypeEnum.Type3 => GetDelayWithParams(30),
-                _ => 0
-            };
         }
     }
 }
