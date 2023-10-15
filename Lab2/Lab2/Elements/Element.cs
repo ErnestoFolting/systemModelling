@@ -1,7 +1,6 @@
 ﻿using Lab3.DistributionHelpers;
 using Lab3.Enums;
 using Lab3.GeneratingElements.Elements;
-using Lab3.Helpers;
 using Lab3.NextElementChoosingRules;
 
 namespace Lab3.Elements
@@ -36,7 +35,7 @@ namespace Lab3.Elements
 
         public double getDelay(GeneratedElementTypeEnum type)
         {
-            if(delayProvider.GetType() == typeof(DutyDoctorsExponentialDelayProvider))
+            if (delayProvider.GetType() == typeof(DutyDoctorsExponentialDelayProvider))
             {
                 DutyDoctorsExponentialDelayProvider dutyDoctorDelayProvider = (DutyDoctorsExponentialDelayProvider)delayProvider;
                 return dutyDoctorDelayProvider.GetDelayByType(type);

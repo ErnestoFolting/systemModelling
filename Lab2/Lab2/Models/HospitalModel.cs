@@ -12,7 +12,8 @@ namespace Lab3.Models
 
         public List<Element> elements;
 
-        public ProcessElement processElement;
+        public ProcessElement _labReception;
+
         public HospitalModel()
         {
             IDelayProvider DelayGenerationPatients = new ExponentialDelayProvider(15);
@@ -59,7 +60,7 @@ namespace Lab3.Models
             labAnalysis.elementName = "LAB_ANALYSIS";
             goingToDutyDoctors.elementName = "GOING_TO_DUTY_DOCTORS";
 
-            this.processElement = dutyDoctors;
+            this._labReception = labReception;
 
             elements = new List<Element>() { createElement, dutyDoctors, goingToWard, goingToLab, labReception, labAnalysis, goingToDutyDoctors };
         }
@@ -86,6 +87,8 @@ namespace Lab3.Models
             Console.WriteLine("Type 1: " + ProcessElement.timeStats[GeneratedElementTypeEnum.Type1] / CreateElement.CountDict[GeneratedElementTypeEnum.Type1]);
             Console.WriteLine("Type 2: " + ProcessElement.timeStats[GeneratedElementTypeEnum.Type2] / CreateElement.CountDict[GeneratedElementTypeEnum.Type2]);
             Console.WriteLine("Type 3: " + ProcessElement.timeStats[GeneratedElementTypeEnum.Type3] / CreateElement.CountDict[GeneratedElementTypeEnum.Type3]);
+
+            Console.WriteLine("Avg interval between arrivings in lab: " + this._labReception.timeCurrent / (this._labReception.exitedElements + this._labReception.queue.Count));
         }
     }
 }
