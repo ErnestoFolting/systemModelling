@@ -1,6 +1,4 @@
-﻿using Lab3.DistributionHelpers;
-using Lab3.Models;
-using ScottPlot.Statistics;
+﻿using Lab3.Models;
 
 namespace Lab3
 {

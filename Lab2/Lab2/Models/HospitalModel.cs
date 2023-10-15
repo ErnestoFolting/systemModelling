@@ -31,10 +31,10 @@ namespace Lab3.Models
             CreateElement createElement = new CreateElement(DelayGenerationPatients, elementGenerator, ruleByPriorityOrQueueSize);
             ProcessElement dutyDoctors = new ProcessElement(DelayDutyDoctors, 2, ruleAfterDutyDoctors);
             ProcessElement goingToWard = new ProcessElement(DelayGoingToWard, 3, ruleByPriorityOrQueueSize);
-            ProcessElement goingToLab = new ProcessElement(DelayGoingToOrFromLab, 20, ruleByPriorityOrQueueSize);
+            ProcessElement goingToLab = new ProcessElement(DelayGoingToOrFromLab, 100, ruleByPriorityOrQueueSize);
             ProcessElement labReception = new ProcessElement(DelayServingOnLabReception, 1, ruleByPriorityOrQueueSize);
             ProcessElement labAnalysis = new ProcessElement(DelayMakingAnalysis, 2, ruleAfterLabAnalysis);
-            ProcessElement goingToDutyDoctors = new ProcessElement(DelayGoingToOrFromLab, 20, ruleByPriorityOrQueueSize);
+            ProcessElement goingToDutyDoctors = new ProcessElement(DelayGoingToOrFromLab, 100, ruleByPriorityOrQueueSize);
 
             createElement.AddNextElement(dutyDoctors, 1);
             dutyDoctors.AddNextElement(goingToWard, 1);
@@ -67,15 +67,25 @@ namespace Lab3.Models
         {
             Model model = new Model(elements);
 
-            model.Simulation(10000, ActionPerIteration);
-            Console.WriteLine(CreateElement.CountDict[GeneratedElementTypeEnum.Type1]);
-            Console.WriteLine(CreateElement.CountDict[GeneratedElementTypeEnum.Type2]);
-            Console.WriteLine(CreateElement.CountDict[GeneratedElementTypeEnum.Type3]);
-            Console.WriteLine("\n\n\n" + this.processElement.queue.Count);
+            model.Simulation(100000, ActionPerIteration);
+
+            OutputStats();
         }
 
         private void ActionPerIteration(double delta)
         {
+        }
+
+        private void OutputStats()
+        {
+            Console.WriteLine(CreateElement.CountDict[GeneratedElementTypeEnum.Type1]);
+            Console.WriteLine(CreateElement.CountDict[GeneratedElementTypeEnum.Type2]);
+            Console.WriteLine(CreateElement.CountDict[GeneratedElementTypeEnum.Type3]);
+
+
+            Console.WriteLine("Type 1: " + ProcessElement.timeStats[GeneratedElementTypeEnum.Type1] / CreateElement.CountDict[GeneratedElementTypeEnum.Type1]);
+            Console.WriteLine("Type 2: " + ProcessElement.timeStats[GeneratedElementTypeEnum.Type2] / CreateElement.CountDict[GeneratedElementTypeEnum.Type2]);
+            Console.WriteLine("Type 3: " + ProcessElement.timeStats[GeneratedElementTypeEnum.Type3] / CreateElement.CountDict[GeneratedElementTypeEnum.Type3]);
         }
     }
 }

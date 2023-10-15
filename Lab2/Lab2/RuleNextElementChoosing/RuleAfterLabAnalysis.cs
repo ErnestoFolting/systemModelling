@@ -12,6 +12,7 @@ namespace Lab3.RuleNextElementChoosing
             if(exitedElement.GetType() == GeneratedElementTypeEnum.Type2)
             {
                 exitedElement.SetType(GeneratedElementTypeEnum.Type1);
+                exitedElement.SetTypeChanged(true);
                 return nextElements.FirstOrDefault(el => el.element.elementName.Contains("DUTY")).element;
             }
             else

@@ -38,6 +38,8 @@ namespace Lab3.Elements
 
             IGeneratedElement generatedElement = _elementsGenerator.GenerateElement();
 
+            generatedElement.SetGenerationTime(timeCurrent);
+
             CountDict[generatedElement.GetType()]++;
 
             exitedElements++;

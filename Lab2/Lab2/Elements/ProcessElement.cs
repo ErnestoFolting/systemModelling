@@ -16,6 +16,13 @@ namespace Lab3.Elements
         public double avgWorkingParts { get; private set; }
         public static int queueChanges { get; set; }
 
+        public static Dictionary<GeneratedElementTypeEnum, double> timeStats = new()
+        {
+            {GeneratedElementTypeEnum.Type1,0 },
+            {GeneratedElementTypeEnum.Type2,0 },
+            {GeneratedElementTypeEnum.Type3,0 }
+        };
+
         public override double timeNext
         {
             get
@@ -121,7 +128,22 @@ namespace Lab3.Elements
                     nextElement.Enter(exitedElement);
                     Console.WriteLine("From " + elementName + " to " + nextElement.elementName);
                 }
-            };
+                else
+                {
+                    timeStats[exitedElement.GetType()] += exitedElement.GetTimeDifference(timeCurrent);
+                }
+            }
+            else
+            {
+                if (exitedElement.GetTypeChanged())
+                {
+                    timeStats[GeneratedElementTypeEnum.Type2] += exitedElement.GetTimeDifference(timeCurrent);
+                }
+                else
+                {
+                    timeStats[exitedElement.GetType()] += exitedElement.GetTimeDifference(timeCurrent);
+                }
+            }
         }
 
         public override void PrintStat()
