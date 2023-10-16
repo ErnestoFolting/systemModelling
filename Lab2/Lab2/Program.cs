@@ -6,11 +6,11 @@ namespace Lab3
     {
         static void Main(string[] args)
         {
-            //BankModel bank = new BankModel();
-            //bank.StartSimulation();
+            BankModel bank = new BankModel();
+            bank.StartSimulation();
 
-            HospitalModel hospital = new HospitalModel();
-            hospital.StartSimulation();
+            //HospitalModel hospital = new HospitalModel();
+            //hospital.StartSimulation();
         }
     }
 }

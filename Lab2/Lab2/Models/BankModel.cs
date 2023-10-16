@@ -25,7 +25,6 @@ namespace Lab3.Models
             CreateElement createElement = new CreateElement(DelayGenerationClients, elementGenerator, ruleNextElementChoosing);
             ProcessElement processElement1 = new ProcessElement(DelayServingClients, 1, ruleNextElementChoosing);
             ProcessElement processElement2 = new ProcessElement(DelayServingClients, 1, ruleNextElementChoosing);
-
             createElement.AddNextElement(processElement1, 1);
             createElement.AddNextElement(processElement2, 1);
 
@@ -36,9 +35,32 @@ namespace Lab3.Models
             processElement1.elementName = "PROCESSOR1";
             processElement2.elementName = "PROCESSOR2";
 
+            //initialConditions
 
+            NormalDelayProvider normalDelayProvider = new(1, 0.3);
+
+            processElement1.processParts[0].elementOnServing = elementGenerator.GenerateElement();
+            processElement1.processParts[0].isServing = true;
+            processElement1.processParts[0].timeNext = normalDelayProvider.GetDelay();
+
+            processElement2.processParts[0].elementOnServing = elementGenerator.GenerateElement();
+            processElement2.processParts[0].isServing = true;
+            processElement2.processParts[0].timeNext = normalDelayProvider.GetDelay();
+
+            createElement.timeNext = 0.1;
+
+            for (int i = 0; i < 2; i++)
+            {
+                processElement1.queue.Add(elementGenerator.GenerateElement());
+            }
+
+            for (int i = 0; i < 2; i++)
+            {
+                processElement2.queue.Add(elementGenerator.GenerateElement());
+            }
+
+            //elements list
             elements = new List<Element>() { createElement, processElement1, processElement2 };
-
         }
         public void StartSimulation()
         {

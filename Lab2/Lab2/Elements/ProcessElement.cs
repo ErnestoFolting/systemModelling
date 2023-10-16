@@ -1,7 +1,6 @@
 ﻿using Lab3.DistributionHelpers;
 using Lab3.Enums;
 using Lab3.GeneratingElements.Elements;
-using Lab3.Helpers;
 using Lab3.NextElementChoosingRules;
 
 namespace Lab3.Elements
@@ -101,8 +100,8 @@ namespace Lab3.Elements
             if (queue.Count > 0)
             {
                 IGeneratedElement? elementToServe;
-                
-                if(queue.Any(el => el.GetPriority() == 1))
+
+                if (queue.Any(el => el.GetPriority() == 1))
                 {
                     elementToServe = queue.FirstOrDefault(el => el.GetPriority().Equals(1));
                 }
@@ -123,7 +122,7 @@ namespace Lab3.Elements
             if (nextElements.Count != 0 && exitedElement != null)
             {
                 ProcessElement? nextElement = ruleNextElementChoosing.GetNextElement(nextElements, exitedElement);
-                if(nextElement != null)
+                if (nextElement != null)
                 {
                     nextElement.Enter(exitedElement);
                     Console.WriteLine("From " + elementName + " to " + nextElement.elementName);

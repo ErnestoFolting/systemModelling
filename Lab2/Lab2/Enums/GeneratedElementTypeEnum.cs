@@ -2,7 +2,7 @@
 {
     public enum GeneratedElementTypeEnum
     {
-        Type1 = 1,
+        Type1 = 1, //default
         Type2 = 2,
         Type3 = 3
     }
