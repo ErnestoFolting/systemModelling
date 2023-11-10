@@ -48,7 +48,7 @@ namespace Lab3.Elements
             {
                 ProcessElement nextElement = ruleNextElementChoosing.GetNextElement(nextElements,generatedElement);
                 nextElement.Enter(generatedElement);
-                Console.WriteLine("From " + elementName + " to " + nextElement.elementName + " exited " + generatedElement.GetType());
+                //Console.WriteLine("From " + elementName + " to " + nextElement.elementName + " exited " + generatedElement.GetType());
             };
         }
 

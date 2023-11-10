@@ -125,7 +125,7 @@ namespace Lab3.Elements
                 if (nextElement != null)
                 {
                     nextElement.Enter(exitedElement);
-                    Console.WriteLine("From " + elementName + " to " + nextElement.elementName);
+                    //Console.WriteLine("From " + elementName + " to " + nextElement.elementName);
                 }
                 else
                 {
