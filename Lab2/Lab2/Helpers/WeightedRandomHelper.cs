@@ -22,23 +22,5 @@ namespace Lab3.Helpers
             }
             return default;
         }
-
-        public static GeneratedElementTypeEnum GetRandomGeneratedElementType(List<(GeneratedElementTypeEnum type, double chance)> generatedElementsTypes)
-        {
-            Random rand = new Random();
-            double chancesSum = generatedElementsTypes.Sum(el => el.chance);
-            double randValue = rand.NextDouble() * chancesSum;
-
-            double chanceAcc = 0;
-            for (int i = 0; i < generatedElementsTypes.Count; i++)
-            {
-                chanceAcc += generatedElementsTypes[i].chance;
-                if (chanceAcc > randValue)
-                {
-                    return generatedElementsTypes[i].type;
-                }
-            }
-            return default;
-        }
     }
 }

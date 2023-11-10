@@ -13,7 +13,6 @@ namespace Lab3.Elements
         public double meanQueueSize { get; private set; }
         public double timeInWork { get; private set; }
         public double avgWorkingParts { get; private set; }
-        public static int queueChanges { get; set; }
 
         public static Dictionary<GeneratedElementTypeEnum, double> timeStats = new()
         {
@@ -121,11 +120,11 @@ namespace Lab3.Elements
             //transfer element to the next ProcessElement
             if (nextElements.Count != 0 && exitedElement != null)
             {
-                ProcessElement? nextElement = ruleNextElementChoosing.GetNextElement(nextElements, exitedElement);
+                ProcessElement? nextElement = ruleNextElementChoosing.GetNextElement(nextElements);
                 if (nextElement != null)
                 {
                     nextElement.Enter(exitedElement);
-                    //Console.WriteLine("From " + elementName + " to " + nextElement.elementName);
+                    Console.WriteLine("From " + elementName + " to " + nextElement.elementName);
                 }
                 else
                 {

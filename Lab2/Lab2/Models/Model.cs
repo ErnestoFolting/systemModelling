@@ -37,7 +37,7 @@ namespace Lab3.Models
 
                 Element? nextElement = elements.Find(el => el.elementId == nextEventId);
 
-                //Console.WriteLine("\n\n\nNext will be event in " + nextElement?.elementName + " , time of this event = " + timeNext);
+                Console.WriteLine("\n\n\nNext will be event in " + nextElement?.elementName + " , time of this event = " + timeNext);
                 foreach (Element element in elements)
                 {
                     element.EvaluateStats(timeDelta);
@@ -51,11 +51,11 @@ namespace Lab3.Models
                 {
                     if (el.timeNext == timeCurrent) el.Exit();
                 });
-                //Console.WriteLine("...Current time: " + timeCurrent);
-                //PrintCurrentStats();
+                Console.WriteLine("...Current time: " + timeCurrent);
+                PrintCurrentStats();
 
             }
-            //PrintResult();
+            PrintResult();
         }
 
         private void PrintCurrentStats()

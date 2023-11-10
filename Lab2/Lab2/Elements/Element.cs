@@ -35,15 +35,7 @@ namespace Lab3.Elements
 
         public double getDelay(GeneratedElementTypeEnum type)
         {
-            if (delayProvider.GetType() == typeof(DutyDoctorsExponentialDelayProvider))
-            {
-                DutyDoctorsExponentialDelayProvider dutyDoctorDelayProvider = (DutyDoctorsExponentialDelayProvider)delayProvider;
-                return dutyDoctorDelayProvider.GetDelayByType(type);
-            }
-            else
-            {
-                return delayProvider.GetDelay();
-            }
+            return delayProvider.GetDelay();
         }
 
         public abstract void Enter(IGeneratedElement generatedElement);

@@ -1,8 +1,6 @@
 ﻿using Lab3.DistributionHelpers;
-using Lab3.Enums;
 using Lab3.GeneratingElements.Elements;
 using Lab3.GeneratingElements.Generators;
-using Lab3.Helpers;
 using Lab3.NextElementChoosingRules;
 
 namespace Lab3.Elements
@@ -13,13 +11,6 @@ namespace Lab3.Elements
 
         private IElementsGenerator _elementsGenerator;
         
-        public static Dictionary<GeneratedElementTypeEnum, int> CountDict = new Dictionary<GeneratedElementTypeEnum, int>()
-        {
-            {GeneratedElementTypeEnum.Type1,0},
-            {GeneratedElementTypeEnum.Type2,0},
-            {GeneratedElementTypeEnum.Type3,0}
-        };
-
         public CreateElement(IDelayProvider delayProvider, IElementsGenerator generator, IRuleNextElementChoosing ruleNextElementChoosing)
             : base(delayProvider, ruleNextElementChoosing)
         {
@@ -40,15 +31,13 @@ namespace Lab3.Elements
 
             generatedElement.SetGenerationTime(timeCurrent);
 
-            CountDict[generatedElement.GetType()]++;
-
             exitedElements++;
 
             if (nextElements.Count != 0)
             {
-                ProcessElement nextElement = ruleNextElementChoosing.GetNextElement(nextElements,generatedElement);
+                ProcessElement nextElement = ruleNextElementChoosing.GetNextElement(nextElements);
                 nextElement.Enter(generatedElement);
-                //Console.WriteLine("From " + elementName + " to " + nextElement.elementName + " exited " + generatedElement.GetType());
+                Console.WriteLine("From " + elementName + " to " + nextElement.elementName + " exited " + generatedElement.GetType());
             };
         }
 
