@@ -18,26 +18,24 @@ namespace Lab3.Elements
             _elementsGenerator = generator;
         }
 
-        public override void Enter(IGeneratedElement generatedElement)
+        public override void Enter((IGeneratedElement, IGeneratedElement) generatedElement)
         {
 
         }
 
         public override void Exit()
         {
-            timeNext = timeCurrent + getDelayInCreate();
+            timeNext = timeCurrent + delayProvider.GetDelay();
 
-            IGeneratedElement generatedElement = _elementsGenerator.GenerateElement();
-
-            generatedElement.SetGenerationTime(timeCurrent);
+            var shipParts = _elementsGenerator.GenerateElement();
 
             exitedElements++;
 
             if (nextElements.Count != 0)
             {
                 ProcessElement nextElement = ruleNextElementChoosing.GetNextElement(nextElements);
-                nextElement.Enter(generatedElement);
-                Console.WriteLine("From " + elementName + " to " + nextElement.elementName + " exited " + generatedElement.GetType());
+                nextElement.Enter(shipParts);
+                Console.WriteLine("From " + elementName + " to " + nextElement.elementName + " exited " + shipParts.part1.GetType());
             };
         }
 
@@ -51,9 +49,5 @@ namespace Lab3.Elements
             Console.WriteLine("Total exited elements from CREATOR: " + exitedElements + " time of next create " + timeNext);
         }
 
-        private double getDelayInCreate()
-        {
-            return delayProvider.GetDelay();
-        }
     }
 }

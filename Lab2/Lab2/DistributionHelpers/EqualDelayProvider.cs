@@ -1,6 +1,4 @@
-﻿using Lab3.Enums;
-
-namespace Lab3.DistributionHelpers
+﻿namespace Lab3.DistributionHelpers
 {
     public class EqualDelayProvider : IDelayProvider
     {

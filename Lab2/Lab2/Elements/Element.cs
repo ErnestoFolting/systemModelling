@@ -1,5 +1,4 @@
 ﻿using Lab3.DistributionHelpers;
-using Lab3.Enums;
 using Lab3.GeneratingElements.Elements;
 using Lab3.NextElementChoosingRules;
 
@@ -7,13 +6,14 @@ namespace Lab3.Elements
 {
     public abstract class Element
     {
+        public static int nextElementId { get; private set; }
+
         public string elementName { get; set; }
         public virtual double timeNext { get; set; }
         public IDelayProvider delayProvider { get; private set; }
         public int exitedElements { get; protected set; }
         public double timeCurrent { get; set; }
         public List<(ProcessElement element, double chance)> nextElements { get; private set; } = new();
-        public static int nextElementId { get; private set; }
         public int elementId { get; private set; }
         public IRuleNextElementChoosing ruleNextElementChoosing { get; private set; }
 
@@ -33,12 +33,12 @@ namespace Lab3.Elements
             nextElements.Add((element, chance));
         }
 
-        public double getDelay(GeneratedElementTypeEnum type)
+        public double getDelay()
         {
             return delayProvider.GetDelay();
         }
 
-        public abstract void Enter(IGeneratedElement generatedElement);
+        public abstract void Enter((IGeneratedElement part1, IGeneratedElement part2) generatedElement);
 
         public abstract void Exit();
 

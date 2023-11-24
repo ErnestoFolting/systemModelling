@@ -11,17 +11,17 @@ namespace Lab3.Models
         public List<Element> elements;
         public HavenModel()
         {
-            IDelayProvider shipArrivingDelay = new ExponentialDelayProvider(1.25);
+            IDelayProvider shipArrivingDelay = new ExponentialDelayProvider(0.75);
             IDelayProvider processDelay = new EqualDelayProvider(0.5,1.5);
-            IElementsGenerator generator = new DefaultElementsGenerator();
+            IElementsGenerator generator = new ShipPartsElementsGenerator();
             IRuleNextElementChoosing ruleNextElementChoosing = new RuleByChance();
 
             CreateElement shipsCreation = new(shipArrivingDelay, generator, ruleNextElementChoosing);
-            ProcessElement cargoCrane = new(processDelay, 1, ruleNextElementChoosing);
+            ProcessElement cargoCrane = new(processDelay, 2, ruleNextElementChoosing);
 
-            shipsCreation.AddNextElement(cargoCrane,1);
+            shipsCreation.AddNextElement(cargoCrane, 1);
 
-            cargoCrane.maxQueueSize = 10;
+            cargoCrane.maxQueueSize = int.MaxValue;
 
             elements = new() { shipsCreation, cargoCrane };
 
@@ -31,7 +31,7 @@ namespace Lab3.Models
         public void StartSimulation()
         {
             Model model = new(elements);
-            model.Simulation(1000, null);
+            model.Simulation(10, null);
         }
     }
 }

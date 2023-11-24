@@ -2,14 +2,16 @@
 
 namespace Lab3.Elements
 {
-    public class ProcessPart
+    public class Crane
     {
         public int id;
         public bool isServing;
         public double timeNext;
-        public IGeneratedElement elementOnServing;
+        public double timeStart;
+        public IGeneratedElement shipPartOnServing1;
+        public IGeneratedElement shipPartOnServing2;
 
-        public ProcessPart(int id)
+        public Crane(int id)
         {
             this.id = id;
             isServing = false;

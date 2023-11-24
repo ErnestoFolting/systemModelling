@@ -77,7 +77,7 @@ namespace Lab3.Models
                         "\nFailure probability: " + p.failureElements / (double)(p.exitedElements + p.failureElements) +
                         "\nLoading " + p.timeInWork / timeCurrent +
                         "\nAvg serving time " + p.timeInWork / p.exitedElements +
-                        "\nAvg parts in work " + p.avgWorkingParts / timeCurrent + "\n\n\n");
+                        "\nAvg parts in work " + p.avgWorkingCranes / timeCurrent + "\n\n\n");
                 }
             });
         }
