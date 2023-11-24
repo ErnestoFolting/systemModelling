@@ -1,4 +1,5 @@
-﻿using Lab3.Models;
+﻿using Lab3.Helpers.Loggers;
+using Lab3.Models;
 
 namespace Lab3
 {
@@ -6,7 +7,8 @@ namespace Lab3
     {
         static void Main(string[] args)
         {
-            HavenModel haven = new();
+            ILogger logger = new Logger(true);
+            HavenModel haven = new(logger);
             haven.StartSimulation();
         }
     }

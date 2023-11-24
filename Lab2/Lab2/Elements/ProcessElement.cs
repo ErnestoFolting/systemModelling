@@ -1,5 +1,6 @@
-﻿using Lab3.DistributionHelpers;
-using Lab3.GeneratingElements.Elements;
+﻿using Lab3.GeneratingElements.Elements;
+using Lab3.Helpers.DistributionHelpers;
+using Lab3.Helpers.Loggers;
 using Lab3.NextElementChoosingRules;
 
 namespace Lab3.Elements
@@ -48,7 +49,7 @@ namespace Lab3.Elements
         }
 
         public List<Crane> cranes { get; private set; } = new();
-        public ProcessElement(IDelayProvider delayProvider, int processPartsCount, IRuleNextElementChoosing ruleNextElementChoosing) : base(delayProvider, ruleNextElementChoosing)
+        public ProcessElement(IDelayProvider delayProvider, int processPartsCount, IRuleNextElementChoosing ruleNextElementChoosing, ILogger logger) : base(delayProvider, ruleNextElementChoosing, logger)
         {
             meanQueueSize = 0.0;
             avgWorkingCranes = 0.0;
@@ -65,7 +66,7 @@ namespace Lab3.Elements
             var crane2 = cranes[1]; //secondCrane
 
             double fullDelay = getDelay();
-            Console.WriteLine("Full delay " + fullDelay);
+            _logger.Log("Full delay " + fullDelay);
 
             if (isFullFree) // no ships in haven
             {
@@ -147,7 +148,7 @@ namespace Lab3.Elements
                 freeCrane.shipPartOnServing2 = shipToServe.part2;
                 double fullDelay = getDelay();
                 freeCrane.timeNext = timeCurrent + fullDelay;
-                Console.WriteLine("Full delay " + fullDelay);
+                _logger.Log("Full delay " + fullDelay);
                 freeCrane.timeStart = timeCurrent;
             }        
         }
@@ -155,7 +156,7 @@ namespace Lab3.Elements
         public override void PrintStat()
         {
             base.PrintStat();
-            Console.WriteLine("Failure elements " + failureElements);
+            _logger.Log("Failure elements " + failureElements);
         }
 
         public override void EvaluateStats(double delta)
@@ -175,43 +176,43 @@ namespace Lab3.Elements
         public override void PrintCurrentStat()
         {
             string statOfServing = isServing ? " is serving " : " is waiting ";
-            Console.WriteLine(elementName + statOfServing + " already served " + exitedElements + " time of next exit " + timeNext);
-            Console.WriteLine("\nCargo crane 1:");
+            _logger.Log(elementName + statOfServing + " already served " + exitedElements + " time of next exit " + timeNext);
+            _logger.Log("\nCargo crane 1:");
             if (cranes[0].shipPartOnServing1 != null)
             {
-                Console.WriteLine("part 1 : " + cranes[0].shipPartOnServing1.GetElementID());
+                _logger.Log("part 1 : " + cranes[0].shipPartOnServing1.GetElementID());
             }
             else
             {
-                Console.WriteLine("part 1 : empty");
+                _logger.Log("part 1 : empty");
             }
             if (cranes[0].shipPartOnServing2 != null) {
-                Console.WriteLine("part 2 : " + cranes[0].shipPartOnServing2.GetElementID());
+                _logger.Log("part 2 : " + cranes[0].shipPartOnServing2.GetElementID());
             }
             else
             {
-                Console.WriteLine("part 2 : empty");
+                _logger.Log("part 2 : empty");
             }
-            Console.WriteLine("timeNext: " + cranes[0].timeNext + "\n");
+            _logger.Log("timeNext: " + cranes[0].timeNext + "\n");
 
-            Console.WriteLine("\nCargo crane 2:");
+            _logger.Log("\nCargo crane 2:");
             if (cranes[1].shipPartOnServing1 != null)
             {
-                Console.WriteLine("part 1 : " + cranes[1].shipPartOnServing1.GetElementID());
+                _logger.Log("part 1 : " + cranes[1].shipPartOnServing1.GetElementID());
             }
             else
             {
-                Console.WriteLine("part 1 : empty");
+                _logger.Log("part 1 : empty");
             }
             if (cranes[1].shipPartOnServing2 != null)
             {
-                Console.WriteLine("part 2 : " + cranes[1].shipPartOnServing2.GetElementID());
+                _logger.Log("part 2 : " + cranes[1].shipPartOnServing2.GetElementID());
             }
             else
             {
-                Console.WriteLine("part 2 : empty");
+                _logger.Log("part 2 : empty");
             }
-            Console.WriteLine("timeNext: " + cranes[1].timeNext + "\n");
+            _logger.Log("timeNext: " + cranes[1].timeNext + "\n");
         }
     }
 }

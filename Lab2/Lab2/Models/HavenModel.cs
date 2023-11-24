@@ -1,6 +1,7 @@
-﻿using Lab3.DistributionHelpers;
-using Lab3.Elements;
+﻿using Lab3.Elements;
 using Lab3.GeneratingElements.Generators;
+using Lab3.Helpers.DistributionHelpers;
+using Lab3.Helpers.Loggers;
 using Lab3.NextElementChoosingRules;
 using Lab3.RuleNextElementChoosing;
 
@@ -9,15 +10,18 @@ namespace Lab3.Models
     public class HavenModel : IModel
     {
         public List<Element> elements;
-        public HavenModel()
+        private ILogger _logger;
+        public HavenModel(ILogger logger)
         {
+            _logger = logger;
+
             IDelayProvider shipArrivingDelay = new ExponentialDelayProvider(0.75);
             IDelayProvider processDelay = new EqualDelayProvider(0.5,1.5);
             IElementsGenerator generator = new ShipPartsElementsGenerator();
             IRuleNextElementChoosing ruleNextElementChoosing = new RuleByChance();
 
-            CreateElement shipsCreation = new(shipArrivingDelay, generator, ruleNextElementChoosing);
-            ProcessElement cargoCrane = new(processDelay, 2, ruleNextElementChoosing);
+            CreateElement shipsCreation = new(shipArrivingDelay, generator, ruleNextElementChoosing, _logger);
+            ProcessElement cargoCrane = new(processDelay, 2, ruleNextElementChoosing, _logger);
 
             shipsCreation.AddNextElement(cargoCrane, 1);
 
@@ -30,7 +34,7 @@ namespace Lab3.Models
         }
         public void StartSimulation()
         {
-            Model model = new(elements);
+            Model model = new(elements, _logger);
             model.Simulation(10, null);
         }
     }

@@ -1,6 +1,7 @@
-﻿using Lab3.DistributionHelpers;
-using Lab3.GeneratingElements.Elements;
+﻿using Lab3.GeneratingElements.Elements;
 using Lab3.GeneratingElements.Generators;
+using Lab3.Helpers.DistributionHelpers;
+using Lab3.Helpers.Loggers;
 using Lab3.NextElementChoosingRules;
 
 namespace Lab3.Elements
@@ -11,8 +12,9 @@ namespace Lab3.Elements
 
         private IElementsGenerator _elementsGenerator;
         
-        public CreateElement(IDelayProvider delayProvider, IElementsGenerator generator, IRuleNextElementChoosing ruleNextElementChoosing)
-            : base(delayProvider, ruleNextElementChoosing)
+        
+        public CreateElement(IDelayProvider delayProvider, IElementsGenerator generator, IRuleNextElementChoosing ruleNextElementChoosing, ILogger logger)
+            : base(delayProvider, ruleNextElementChoosing, logger)
         {
             timeNext = 0.0;
             _elementsGenerator = generator;
@@ -35,7 +37,7 @@ namespace Lab3.Elements
             {
                 ProcessElement nextElement = ruleNextElementChoosing.GetNextElement(nextElements);
                 nextElement.Enter(shipParts);
-                Console.WriteLine("From " + elementName + " to " + nextElement.elementName + " exited " + shipParts.part1.GetType());
+                _logger.Log("From " + elementName + " to " + nextElement.elementName + " exited ship");
             };
         }
 
@@ -46,7 +48,7 @@ namespace Lab3.Elements
 
         public override void PrintCurrentStat()
         {
-            Console.WriteLine("Total exited elements from CREATOR: " + exitedElements + " time of next create " + timeNext);
+            _logger.Log("Total exited elements from CREATOR: " + exitedElements + " time of next create " + timeNext);
         }
 
     }

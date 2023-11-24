@@ -1,4 +1,4 @@
-﻿namespace Lab3.DistributionHelpers
+﻿namespace Lab3.Helpers.DistributionHelpers
 {
     public class EqualDelayProvider : IDelayProvider
     {

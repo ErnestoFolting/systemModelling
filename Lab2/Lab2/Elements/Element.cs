@@ -1,5 +1,6 @@
-﻿using Lab3.DistributionHelpers;
-using Lab3.GeneratingElements.Elements;
+﻿using Lab3.GeneratingElements.Elements;
+using Lab3.Helpers.DistributionHelpers;
+using Lab3.Helpers.Loggers;
 using Lab3.NextElementChoosingRules;
 
 namespace Lab3.Elements
@@ -7,6 +8,8 @@ namespace Lab3.Elements
     public abstract class Element
     {
         public static int nextElementId { get; private set; }
+
+        protected ILogger _logger;
 
         public string elementName { get; set; }
         public virtual double timeNext { get; set; }
@@ -17,7 +20,7 @@ namespace Lab3.Elements
         public int elementId { get; private set; }
         public IRuleNextElementChoosing ruleNextElementChoosing { get; private set; }
 
-        public Element(IDelayProvider delayProvider, IRuleNextElementChoosing ruleNextElementChoosing)
+        public Element(IDelayProvider delayProvider, IRuleNextElementChoosing ruleNextElementChoosing, ILogger logger)
         {
             timeNext = 0.0;
             this.delayProvider = delayProvider;
@@ -26,6 +29,7 @@ namespace Lab3.Elements
             nextElementId++;
             elementName = "Element " + elementId;
             this.ruleNextElementChoosing = ruleNextElementChoosing;
+            this._logger = logger;
         }
 
         public void AddNextElement(ProcessElement element, double chance)
@@ -46,7 +50,7 @@ namespace Lab3.Elements
 
         public virtual void PrintStat()
         {
-            Console.WriteLine(elementName + " exited " + exitedElements + "\n");
+            _logger.Log(elementName + " exited " + exitedElements + "\n");
         }
 
         public abstract void PrintCurrentStat();

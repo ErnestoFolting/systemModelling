@@ -1,4 +1,5 @@
 ﻿using Lab3.Elements;
+using Lab3.Helpers.Loggers;
 
 namespace Lab3.Models
 {
@@ -8,13 +9,14 @@ namespace Lab3.Models
         public double timeNext;
         public double timeCurrent;
         int nextEventId;
-
-        public Model(List<Element> elements)
+        public ILogger logger;
+        public Model(List<Element> elements, ILogger logger)
         {
             this.elements = elements;
             timeNext = 0;
             nextEventId = 0;
             timeCurrent = timeNext;
+            this.logger = logger;
         }
 
         public void Simulation(double timeOfSimulation, Action<double>? actionPerIteration)
@@ -37,7 +39,7 @@ namespace Lab3.Models
 
                 Element? nextElement = elements.Find(el => el.elementId == nextEventId);
 
-                Console.WriteLine("\n\n\nNext will be event in " + nextElement?.elementName + " , time of this event = " + timeNext);
+                logger.Log("\n\n\nNext will be event in " + nextElement?.elementName + " , time of this event = " + timeNext);
                 foreach (Element element in elements)
                 {
                     element.EvaluateStats(timeDelta);
@@ -51,7 +53,7 @@ namespace Lab3.Models
                 {
                     if (el.timeNext == timeCurrent) el.Exit();
                 });
-                Console.WriteLine("...Current time: " + timeCurrent);
+                logger.Log("...Current time: " + timeCurrent);
                 PrintCurrentStats();
 
             }
@@ -65,15 +67,15 @@ namespace Lab3.Models
 
         private void PrintResult()
         {
-            Console.WriteLine("\n********************************Results********************************");
+            logger.Log("\n********************************Results********************************");
             elements.ForEach(el =>
             {
                 el.PrintStat();
                 if (el.GetType() == typeof(ProcessElement))
                 {
                     ProcessElement p = (ProcessElement)el;
-                    Console.WriteLine("\n\n" + p.elementName + ":");
-                    Console.WriteLine("Mean queue length: " + p.meanQueueSize / timeCurrent +
+                    logger.Log("\n\n" + p.elementName + ":");
+                    logger.Log("Mean queue length: " + p.meanQueueSize / timeCurrent +
                         "\nFailure probability: " + p.failureElements / (double)(p.exitedElements + p.failureElements) +
                         "\nLoading " + p.timeInWork / timeCurrent +
                         "\nAvg serving time " + p.timeInWork / p.exitedElements +
