@@ -10,7 +10,6 @@ namespace Lab3.Elements
         public static int nextElementId { get; private set; }
 
         protected ILogger _logger;
-
         public string elementName { get; set; }
         public virtual double timeNext { get; set; }
         public IDelayProvider delayProvider { get; private set; }

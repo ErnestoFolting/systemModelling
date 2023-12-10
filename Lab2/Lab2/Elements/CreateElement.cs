@@ -11,8 +11,7 @@ namespace Lab3.Elements
     {
 
         private IElementsGenerator _elementsGenerator;
-        
-        
+
         public CreateElement(IDelayProvider delayProvider, IElementsGenerator generator, IRuleNextElementChoosing ruleNextElementChoosing, ILogger logger)
             : base(delayProvider, ruleNextElementChoosing, logger)
         {
@@ -20,16 +19,11 @@ namespace Lab3.Elements
             _elementsGenerator = generator;
         }
 
-        public override void Enter((IGeneratedElement, IGeneratedElement) generatedElement)
-        {
-
-        }
-
         public override void Exit()
         {
-            timeNext = timeCurrent + delayProvider.GetDelay();
-
             var shipParts = _elementsGenerator.GenerateElement();
+
+            timeNext = timeCurrent + delayProvider.GetDelay();
 
             exitedElements++;
 
@@ -41,15 +35,13 @@ namespace Lab3.Elements
             };
         }
 
-        public override void EvaluateStats(double delta)
-        {
-
-        }
-
         public override void PrintCurrentStat()
         {
             _logger.Log("Total exited elements from CREATOR: " + exitedElements + " time of next create " + timeNext);
         }
+
+        public override void Enter((IGeneratedElement, IGeneratedElement) generatedElement) { }
+        public override void EvaluateStats(double delta){ }
 
     }
 }

@@ -62,8 +62,8 @@ namespace Lab3.Elements
 
         public override void Enter((IGeneratedElement part1, IGeneratedElement part2) shipParts)
         {
-            var crane1 = cranes[0]; //firstCrane
-            var crane2 = cranes[1]; //secondCrane
+            var crane1 = cranes[0];
+            var crane2 = cranes[1];
 
             double fullDelay = getDelay();
             _logger.Log("Full delay " + fullDelay);
@@ -76,7 +76,6 @@ namespace Lab3.Elements
                 {
                     crane.timeNext = partNextTime;
                     crane.isServing = true;
-                    crane.timeStart = timeCurrent;
                 });
 
                 crane1.shipPartOnServing1 = shipParts.part1;
@@ -149,7 +148,6 @@ namespace Lab3.Elements
                 double fullDelay = getDelay();
                 freeCrane.timeNext = timeCurrent + fullDelay;
                 _logger.Log("Full delay " + fullDelay);
-                freeCrane.timeStart = timeCurrent;
             }        
         }
 
@@ -177,42 +175,28 @@ namespace Lab3.Elements
         {
             string statOfServing = isServing ? " is serving " : " is waiting ";
             _logger.Log(elementName + statOfServing + " already served " + exitedElements + " time of next exit " + timeNext);
-            _logger.Log("\nCargo crane 1:");
-            if (cranes[0].shipPartOnServing1 != null)
-            {
-                _logger.Log("part 1 : " + cranes[0].shipPartOnServing1.GetElementID());
-            }
-            else
-            {
-                _logger.Log("part 1 : empty");
-            }
-            if (cranes[0].shipPartOnServing2 != null) {
-                _logger.Log("part 2 : " + cranes[0].shipPartOnServing2.GetElementID());
-            }
-            else
-            {
-                _logger.Log("part 2 : empty");
-            }
-            _logger.Log("timeNext: " + cranes[0].timeNext + "\n");
 
-            _logger.Log("\nCargo crane 2:");
-            if (cranes[1].shipPartOnServing1 != null)
+            cranes.ForEach(el =>
             {
-                _logger.Log("part 1 : " + cranes[1].shipPartOnServing1.GetElementID());
-            }
-            else
-            {
-                _logger.Log("part 1 : empty");
-            }
-            if (cranes[1].shipPartOnServing2 != null)
-            {
-                _logger.Log("part 2 : " + cranes[1].shipPartOnServing2.GetElementID());
-            }
-            else
-            {
-                _logger.Log("part 2 : empty");
-            }
-            _logger.Log("timeNext: " + cranes[1].timeNext + "\n");
+                _logger.Log($"\nCargo crane {el.id}:");
+                if (el.shipPartOnServing1 != null)
+                {
+                _logger.Log("part 1 : " + el.shipPartOnServing1.GetElementID());
+                }
+                else
+                {
+                    _logger.Log("part 1 : empty");
+                }
+                if (el.shipPartOnServing2 != null)
+                {
+                    _logger.Log("part 2 : " + el.shipPartOnServing2.GetElementID());
+                }
+                else
+                {
+                    _logger.Log("part 2 : empty");
+                }
+                _logger.Log("timeNext: " + el.timeNext + "\n");
+            });
         }
     }
 }
