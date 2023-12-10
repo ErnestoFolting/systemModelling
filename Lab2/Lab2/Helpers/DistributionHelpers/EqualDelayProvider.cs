@@ -13,7 +13,8 @@
         {
             double multiplier = rightLimit - leftLimit;
             Random rand = new Random();
-            return rand.NextDouble() * multiplier + leftLimit;
+            var res = rand.NextDouble() * multiplier + leftLimit;
+            return res;
         }
     }
 }

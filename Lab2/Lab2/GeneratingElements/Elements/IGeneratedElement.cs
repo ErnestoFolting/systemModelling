@@ -3,5 +3,6 @@
     public interface IGeneratedElement
     { 
         public int GetElementID();
+        public double GetTimeOfServing(double timeCurrent);
     }
 }

@@ -78,7 +78,9 @@ namespace Lab3.Models
                     logger.Log("Mean queue length: " + p.meanQueueSize / timeCurrent +
                         "\nFailure probability: " + p.failureElements / (double)(p.exitedElements + p.failureElements) +
                         "\nLoading " + p.timeInWork / timeCurrent +
-                        "\nAvg serving time " + p.timeInWork / p.exitedElements +
+                        "\nMin serving time " + p.servingTimeStats.minServingTime+
+                        "\nMax serving time " + p.servingTimeStats.maxServingTime+
+                        "\nAvg serving time " + p.servingTimeStats.totalServingTime / p.exitedElements +
                         "\nAvg parts in work " + p.avgWorkingCranes / timeCurrent + "\n\n\n");
                 }
             });

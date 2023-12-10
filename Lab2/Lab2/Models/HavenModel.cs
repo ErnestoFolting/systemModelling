@@ -15,7 +15,7 @@ namespace Lab3.Models
         {
             _logger = logger;
 
-            IDelayProvider shipArrivingDelay = new ExponentialDelayProvider(0.75);
+            IDelayProvider shipArrivingDelay = new ExponentialDelayProvider(1.25) ;
             IDelayProvider processDelay = new EqualDelayProvider(0.5,1.5);
             IElementsGenerator generator = new ShipPartsElementsGenerator();
             IRuleNextElementChoosing ruleNextElementChoosing = new RuleByChance();
@@ -35,7 +35,7 @@ namespace Lab3.Models
         public void StartSimulation()
         {
             Model model = new(elements, _logger);
-            model.Simulation(10, null);
+            model.Simulation(500, null);
         }
     }
 }

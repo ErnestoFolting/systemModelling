@@ -21,7 +21,7 @@ namespace Lab3.Elements
 
         public override void Exit()
         {
-            var shipParts = _elementsGenerator.GenerateElement();
+            var shipParts = _elementsGenerator.GenerateElement(timeCurrent);
 
             timeNext = timeCurrent + delayProvider.GetDelay();
 

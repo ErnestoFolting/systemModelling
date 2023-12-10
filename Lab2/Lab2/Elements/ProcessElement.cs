@@ -1,6 +1,7 @@
 ﻿using Lab3.GeneratingElements.Elements;
 using Lab3.Helpers.DistributionHelpers;
 using Lab3.Helpers.Loggers;
+using Lab3.Helpers.Statistics;
 using Lab3.NextElementChoosingRules;
 
 namespace Lab3.Elements
@@ -13,6 +14,8 @@ namespace Lab3.Elements
         public double meanQueueSize { get; private set; }
         public double timeInWork { get; private set; }
         public double avgWorkingCranes { get; private set; }
+
+        public ServingTimeStats servingTimeStats { get; private set; } = new();
 
         public override double timeNext
         {
@@ -106,7 +109,17 @@ namespace Lab3.Elements
         public override void Exit()
         {
             List<Crane> cranesToExit = cranes.FindAll(el => el.timeNext == timeNext);
-            int? exitedShipId = cranesToExit.FirstOrDefault()?.shipPartOnServing1.GetElementID();
+            IGeneratedElement? exitedShip = cranesToExit.FirstOrDefault()?.shipPartOnServing1;
+            int? exitedShipId = exitedShip?.GetElementID();
+
+            //serving time stats evaluation
+            double servingTime = exitedShip.GetTimeOfServing(timeCurrent);
+            if (servingTimeStats.minServingTime > servingTime ) servingTimeStats.minServingTime = servingTime;
+            if (servingTimeStats.maxServingTime < servingTime) {
+                servingTimeStats.maxServingTime = servingTime;
+            }
+            
+            servingTimeStats.totalServingTime += servingTime;
 
             exitedElements++;
 
@@ -117,7 +130,6 @@ namespace Lab3.Elements
                 el.shipPartOnServing1 = null;
                 el.shipPartOnServing2 = null;
             });
-
 
             if(queue.Count == 0)
             {
@@ -162,10 +174,6 @@ namespace Lab3.Elements
             meanQueueSize += queue.Count * delta;
             if (isServing)
             {
-                if (cranes[0].shipPartOnServing1.GetElementID() != cranes[1].shipPartOnServing1.GetElementID())
-                {
-                    timeInWork += delta;
-                }
                 timeInWork += delta;
                 avgWorkingCranes += cranes.Count(el => el.isServing) * delta;
             }
