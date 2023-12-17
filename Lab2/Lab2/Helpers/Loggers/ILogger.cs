@@ -1,6 +1,6 @@
 ﻿namespace Lab3.Helpers.Loggers
 {
-    public interface ILogger
+    public interface ILogger : IDisposable
     {
         public void Log(string message);
     }

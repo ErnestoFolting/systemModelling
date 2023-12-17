@@ -2,6 +2,7 @@
 using Lab3.GeneratingElements.Generators;
 using Lab3.Helpers.DistributionHelpers;
 using Lab3.Helpers.Loggers;
+using Lab3.Helpers.Statistics;
 using Lab3.NextElementChoosingRules;
 using Lab3.RuleNextElementChoosing;
 
@@ -15,7 +16,7 @@ namespace Lab3.Models
         {
             _logger = logger;
 
-            IDelayProvider shipArrivingDelay = new ExponentialDelayProvider(1.25) ;
+            IDelayProvider shipArrivingDelay = new ExponentialDelayProvider(0.5) ;
             IDelayProvider processDelay = new EqualDelayProvider(0.5,1.5);
             IElementsGenerator generator = new ShipPartsElementsGenerator();
             IRuleNextElementChoosing ruleNextElementChoosing = new RuleByChance();
@@ -32,10 +33,11 @@ namespace Lab3.Models
             shipsCreation.elementName = "CREATE";
             cargoCrane.elementName = "PROCESS";
         }
-        public void StartSimulation()
+        public SimulationStats StartSimulation()
         {
             Model model = new(elements, _logger);
-            model.Simulation(500, null);
+
+            return model.Simulation(100, null);
         }
     }
 }

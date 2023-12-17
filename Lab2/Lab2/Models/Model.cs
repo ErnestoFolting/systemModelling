@@ -1,5 +1,7 @@
 ﻿using Lab3.Elements;
 using Lab3.Helpers.Loggers;
+using Lab3.Helpers.Statistics;
+using System.Runtime.CompilerServices;
 
 namespace Lab3.Models
 {
@@ -19,7 +21,7 @@ namespace Lab3.Models
             this.logger = logger;
         }
 
-        public void Simulation(double timeOfSimulation, Action<double>? actionPerIteration)
+        public SimulationStats Simulation(double timeOfSimulation, Action<double>? actionPerIteration)
         {
             while (timeCurrent < timeOfSimulation)
             {
@@ -57,7 +59,7 @@ namespace Lab3.Models
                 PrintCurrentStats();
 
             }
-            PrintResult();
+            return PrintResult();
         }
 
         private void PrintCurrentStats()
@@ -65,8 +67,9 @@ namespace Lab3.Models
             elements.ForEach(el => el.PrintCurrentStat());
         }
 
-        private void PrintResult()
+        private SimulationStats PrintResult()
         {
+            SimulationStats stats = new SimulationStats();
             logger.Log("\n********************************Results********************************");
             elements.ForEach(el =>
             {
@@ -75,15 +78,24 @@ namespace Lab3.Models
                 {
                     ProcessElement p = (ProcessElement)el;
                     logger.Log("\n\n" + p.elementName + ":");
-                    logger.Log("Mean queue length: " + p.meanQueueSize / timeCurrent +
-                        "\nFailure probability: " + p.failureElements / (double)(p.exitedElements + p.failureElements) +
-                        "\nLoading " + p.timeInWork / timeCurrent +
-                        "\nMin serving time " + p.servingTimeStats.minServingTime+
-                        "\nMax serving time " + p.servingTimeStats.maxServingTime+
-                        "\nAvg serving time " + p.servingTimeStats.totalServingTime / p.exitedElements +
-                        "\nAvg parts in work " + p.avgWorkingCranes / timeCurrent + "\n\n\n");
+
+                    
+                    stats.meanQueueLength = p.meanQueueSize / timeCurrent;
+                    stats.failureProbability = p.failureElements / (double)(p.exitedElements + p.failureElements);
+                    stats.loading = p.timeInWork / timeCurrent;
+                    stats.minServingTime = p.servingTimeStats.minServingTime;
+                    stats.maxServingTime = p.servingTimeStats.maxServingTime;
+                    stats.avgServingTime = p.servingTimeStats.totalServingTime / p.exitedElements;
+
+                    Console.WriteLine("Mean queue length: " + stats.meanQueueLength +
+                        "\nFailure probability: " + stats.failureProbability +
+                        "\nLoading " + stats.loading +
+                        "\nMin serving time " + stats.minServingTime +
+                        "\nMax serving time " + stats.maxServingTime +
+                        "\nAvg serving time " + stats.avgServingTime);
                 }
             });
+            return stats;
         }
     }
 }
