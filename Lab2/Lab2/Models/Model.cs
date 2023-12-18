@@ -85,12 +85,38 @@ namespace Lab3.Models
                     stats.minServingTime = p.servingTimeStats.minServingTime;
                     stats.maxServingTime = p.servingTimeStats.maxServingTime;
                     stats.avgServingTime = p.servingTimeStats.totalServingTime / p.exitedElements;
+                    stats.avgWorkingParts = p.avgWorkingCranes / timeCurrent;
 
                     Console.WriteLine("Mean queue length: " + stats.meanQueueLength +
                         "\nLoading " + stats.loading +
+                        "\nAvg working parts " + stats.avgWorkingParts +
                         "\nMin serving time " + stats.minServingTime +
                         "\nMax serving time " + stats.maxServingTime +
                         "\nAvg serving time " + stats.avgServingTime);
+                }
+                else
+                {
+                    if (el.GetType() == typeof(SimpleProcessElement))
+                    {
+                        SimpleProcessElement p = (SimpleProcessElement)el;
+                        logger.Log("\n\n" + p.elementName + ":");
+
+
+                        stats.meanQueueLength = p.meanQueueSize / timeCurrent;
+                        stats.failureProbability = p.failureElements / (double)(p.exitedElements + p.failureElements);
+                        stats.loading = p.timeInWork / timeCurrent;
+                        stats.minServingTime = p.servingTimeStats.minServingTime;
+                        stats.maxServingTime = p.servingTimeStats.maxServingTime;
+                        stats.avgServingTime = p.servingTimeStats.totalServingTime / p.exitedElements;
+                        stats.avgWorkingParts = p.avgWorkingParts / timeCurrent;
+
+                        Console.WriteLine("Mean queue length: " + stats.meanQueueLength +
+                            "\nLoading " + stats.loading +
+                            "\nAvg working parts " + stats.avgWorkingParts +
+                            "\nMin serving time " + stats.minServingTime +
+                            "\nMax serving time " + stats.maxServingTime +
+                            "\nAvg serving time " + stats.avgServingTime);
+                    }
                 }
             });
             return stats;

@@ -16,13 +16,14 @@ namespace Lab3.Models
         {
             _logger = logger;
 
-            IDelayProvider shipArrivingDelay = new EqualDelayProvider(0.4, 0.6);
+            IDelayProvider shipArrivingDelay = new ExponentialDelayProvider(1.25);
             IDelayProvider processDelay = new EqualDelayProvider(0.5, 1.5);
             IElementsGenerator generator = new ShipPartsElementsGenerator();
             IRuleNextElementChoosing ruleNextElementChoosing = new RuleByChance();
 
             CreateElement shipsCreation = new(shipArrivingDelay, generator, ruleNextElementChoosing, _logger);
-            ProcessElement cargoCrane = new(processDelay, 2, ruleNextElementChoosing, _logger);
+            //ProcessElement cargoCrane = new(processDelay, 2, ruleNextElementChoosing, _logger);
+            SimpleProcessElement cargoCrane = new(processDelay, 2, ruleNextElementChoosing, _logger);
 
             shipsCreation.AddNextElement(cargoCrane, 1);
 
@@ -33,11 +34,11 @@ namespace Lab3.Models
             shipsCreation.elementName = "CREATE";
             cargoCrane.elementName = "PROCESS";
         }
-        public SimulationStats StartSimulation()
+        public SimulationStats StartSimulation(int time)
         {
             Model model = new(elements, _logger);
 
-            return model.Simulation(100000, null);
+            return model.Simulation(time, null);
         }
     }
 }

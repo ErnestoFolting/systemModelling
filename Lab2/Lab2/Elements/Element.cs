@@ -15,7 +15,7 @@ namespace Lab3.Elements
         public IDelayProvider delayProvider { get; private set; }
         public int exitedElements { get; protected set; }
         public double timeCurrent { get; set; }
-        public List<(ProcessElement element, double chance)> nextElements { get; private set; } = new();
+        public List<(Element element, double chance)> nextElements { get; private set; } = new();
         public int elementId { get; private set; }
         public IRuleNextElementChoosing ruleNextElementChoosing { get; private set; }
 
@@ -31,7 +31,7 @@ namespace Lab3.Elements
             this._logger = logger;
         }
 
-        public void AddNextElement(ProcessElement element, double chance)
+        public void AddNextElement(Element element, double chance)
         {
             nextElements.Add((element, chance));
         }

@@ -6,7 +6,7 @@ namespace Lab3.RuleNextElementChoosing
 {
     public class RuleByChance : IRuleNextElementChoosing
     {
-        public ProcessElement GetNextElement(List<(ProcessElement element, double chance)> nextElements)
+        public Element GetNextElement(List<(Element element, double chance)> nextElements)
         {
             return WeightedRandomHelper.GetRandomNextProcess(nextElements);
         }

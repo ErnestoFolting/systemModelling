@@ -16,7 +16,7 @@ namespace Lab3
             {
                 ILogger logger = new Logger(false);
                 HavenModel haven = new(logger);
-                stats.Add(haven.StartSimulation());
+                stats.Add(haven.StartSimulation(10000));
                 logger.Dispose();
                 Console.WriteLine();
             }
@@ -24,9 +24,10 @@ namespace Lab3
             Console.WriteLine("**************RESULTS:************** \n");
             Console.WriteLine("Avg queue size: " + stats.Average(el => el.meanQueueLength)); 
             Console.WriteLine("Avg loading: " + stats.Average(el => el.loading)); 
+            Console.WriteLine("Avg woking parts: " + stats.Average(el => el.avgWorkingParts)); 
             Console.WriteLine("Min serving time: " + stats.Min(el => el.minServingTime)); 
             Console.WriteLine("Max serving time: " + stats.Max(el => el.maxServingTime)); 
-            Console.WriteLine("Avg serving time: " + stats.Average(el => el.avgServingTime)); 
+            Console.WriteLine("Avg serving time: " + stats.Average(el => el.avgServingTime));
         }
     }
 }

@@ -29,7 +29,7 @@ namespace Lab3.Elements
 
             if (nextElements.Count != 0)
             {
-                ProcessElement nextElement = ruleNextElementChoosing.GetNextElement(nextElements);
+                Element nextElement = ruleNextElementChoosing.GetNextElement(nextElements);
                 nextElement.Enter(shipParts);
                 _logger.Log("From " + elementName + " to " + nextElement.elementName + " exited ship");
             };

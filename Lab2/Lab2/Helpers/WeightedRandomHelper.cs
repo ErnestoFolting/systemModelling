@@ -4,7 +4,7 @@ namespace Lab3.Helpers
 {
     public class WeightedRandomHelper
     {
-        public static ProcessElement GetRandomNextProcess(List<(ProcessElement element, double chance)> nextElements)
+        public static Element GetRandomNextProcess(List<(Element element, double chance)> nextElements)
         {
             Random rand = new Random();
             double chancesSum = nextElements.Sum(el => el.chance);
