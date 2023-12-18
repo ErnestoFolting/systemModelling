@@ -8,7 +8,7 @@ namespace Lab3
     {
         static void Main(string[] args)
         {
-            double runTimes = 10;
+            double runTimes = 5;
 
             List<SimulationStats> stats = new List<SimulationStats>();
 
@@ -16,14 +16,13 @@ namespace Lab3
             {
                 ILogger logger = new Logger(false);
                 HavenModel haven = new(logger);
-                logger.Dispose();
                 stats.Add(haven.StartSimulation());
+                logger.Dispose();
                 Console.WriteLine();
             }
 
             Console.WriteLine("**************RESULTS:************** \n");
             Console.WriteLine("Avg queue size: " + stats.Average(el => el.meanQueueLength)); 
-            Console.WriteLine("Avg failure probability: " + stats.Average(el => el.failureProbability)); 
             Console.WriteLine("Avg loading: " + stats.Average(el => el.loading)); 
             Console.WriteLine("Min serving time: " + stats.Min(el => el.minServingTime)); 
             Console.WriteLine("Max serving time: " + stats.Max(el => el.maxServingTime)); 

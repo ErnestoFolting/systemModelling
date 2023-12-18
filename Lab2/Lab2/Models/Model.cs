@@ -1,7 +1,6 @@
 ﻿using Lab3.Elements;
 using Lab3.Helpers.Loggers;
 using Lab3.Helpers.Statistics;
-using System.Runtime.CompilerServices;
 
 namespace Lab3.Models
 {
@@ -88,7 +87,6 @@ namespace Lab3.Models
                     stats.avgServingTime = p.servingTimeStats.totalServingTime / p.exitedElements;
 
                     Console.WriteLine("Mean queue length: " + stats.meanQueueLength +
-                        "\nFailure probability: " + stats.failureProbability +
                         "\nLoading " + stats.loading +
                         "\nMin serving time " + stats.minServingTime +
                         "\nMax serving time " + stats.maxServingTime +
