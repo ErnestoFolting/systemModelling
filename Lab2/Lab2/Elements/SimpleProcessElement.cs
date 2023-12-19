@@ -1,4 +1,5 @@
-﻿using Lab3.GeneratingElements.Elements;
+﻿using GraphPlottingApp;
+using Lab3.GeneratingElements.Elements;
 using Lab3.Helpers.DistributionHelpers;
 using Lab3.Helpers.Loggers;
 using Lab3.Helpers.Statistics;

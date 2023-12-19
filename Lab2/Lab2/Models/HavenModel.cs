@@ -16,7 +16,7 @@ namespace Lab3.Models
         {
             _logger = logger;
 
-            IDelayProvider shipArrivingDelay = new ExponentialDelayProvider(1.25);
+            IDelayProvider shipArrivingDelay = new EqualDelayProvider(0.25,0.75);
             IDelayProvider processDelay = new EqualDelayProvider(0.5, 1.5);
             IElementsGenerator generator = new ShipPartsElementsGenerator();
             IRuleNextElementChoosing ruleNextElementChoosing = new RuleByChance();

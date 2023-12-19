@@ -1,4 +1,5 @@
-﻿using Lab3.Elements;
+﻿using GraphPlottingApp;
+using Lab3.Elements;
 using Lab3.Helpers.Loggers;
 using Lab3.Helpers.Statistics;
 
@@ -77,6 +78,8 @@ namespace Lab3.Models
                 {
                     ProcessElement p = (ProcessElement)el;
                     logger.Log("\n\n" + p.elementName + ":");
+
+                    PlotHelper.statsPlotsData.Add(p.statsPairs);
 
                     
                     stats.meanQueueLength = p.meanQueueSize / timeCurrent;

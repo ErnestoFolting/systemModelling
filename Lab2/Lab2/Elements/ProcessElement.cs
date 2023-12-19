@@ -1,4 +1,5 @@
-﻿using Lab3.GeneratingElements.Elements;
+﻿using GraphPlottingApp;
+using Lab3.GeneratingElements.Elements;
 using Lab3.Helpers.DistributionHelpers;
 using Lab3.Helpers.Loggers;
 using Lab3.Helpers.Statistics;
@@ -16,6 +17,7 @@ namespace Lab3.Elements
         public double avgWorkingCranes { get; private set; }
 
         public ServingTimeStats servingTimeStats { get; private set; } = new();
+        public List<(double simulationTime, double avgServingTime)> statsPairs { get; private set; } = new();
 
         public override double timeNext
         {
@@ -176,6 +178,19 @@ namespace Lab3.Elements
             {
                 timeInWork += delta;
                 avgWorkingCranes += cranes.Count(el => el.isServing) * delta;
+            }
+            if (exitedElements != 0) {
+                if (statsPairs.Count > 0 && timeCurrent - statsPairs[statsPairs.Count - 1].simulationTime >= 5)
+                {
+                    statsPairs.Add((timeCurrent, servingTimeStats.totalServingTime / exitedElements));
+                }
+                else
+                {
+                    if(statsPairs.Count == 0)
+                    {
+                        statsPairs.Add((timeCurrent, servingTimeStats.totalServingTime / exitedElements));
+                    }
+                }
             }
         }
 
